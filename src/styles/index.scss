@@ -1,0 +1,211 @@
+@import './variables.scss';
+@import './mixin.scss';
+@import './transition.scss';
+@import './element-ui.scss';
+@import './sidebar.scss';
+
+body {
+  height: 100%;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
+}
+
+label {
+  font-weight: 700;
+}
+
+html {
+  height: 100%;
+  box-sizing: border-box;
+}
+
+#app {
+  height: 100%;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+a:focus,
+a:active {
+  outline: none;
+}
+
+a,
+a:focus,
+a:hover {
+  cursor: pointer;
+  color: inherit;
+  text-decoration: none;
+}
+
+div:focus {
+  outline: none;
+}
+
+.clearfix {
+  &:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
+  }
+}
+
+// main-container global css
+.app-container {
+  padding: 8px;
+}
+
+.filter-container {
+  padding: 5px 0;
+
+  .filter-item {
+    display: inline-block;
+    vertical-align: middle;
+    //margin-bottom: 5px;
+    margin: 2px 0;
+    width: 180px;
+  }
+}
+
+.el-input__inner {
+  //height: 36px;
+}
+
+// 通用
+.me-right {
+  float: right;
+}
+
+.el-cascader {
+  width: 100%;
+}
+
+// 表单
+.me-form-container {
+  margin: 10px 10px;
+
+  .box-card {
+
+    .el-form {
+
+      .el-form-item {
+        width: 284px;
+
+        .el-form-item__content {
+          width: 184px;
+
+          .el-textarea {
+            width: 600px;
+          }
+
+          .me-input-prefix {
+            .el-input__inner {
+              padding-left: 25px;
+            }
+            .el-input__prefix {
+              left: 3px;
+            }
+          }
+
+          .el-input-number {
+            width: 184px;
+          }
+
+          .el-input__inner, .el-textarea__inner {
+            //padding-left: 9px;
+          }
+        }
+      }
+      .me-form-memo {
+        width: 100%;
+      }
+    }
+
+    .text {
+      font-size: 14px;
+    }
+
+    .item {
+      margin-bottom: 18px;
+    }
+
+    .el-card__header {
+      padding: 13px 15px;
+    }
+
+    .clearfix {
+      line-height: 28px;
+    }
+    .clearfix:before,
+    .clearfix:after {
+      display: table;
+      content: "";
+    }
+    .clearfix:after {
+      clear: both
+    }
+
+    //.box-card {
+    //  width: 480px;
+    //}
+
+    .el-radio {
+      margin-right: 13px;
+    }
+    .el-radio__label {
+      padding-left: 7px;
+    }
+
+    .me-inner-title {
+      padding: 3px 16px;
+      background-color: #ecf8ff;
+      border-radius: 4px;
+      border-left: 5px solid #50bfff;
+      margin: 20px 0;
+
+      p {
+        margin: 7px 0;
+
+        button {
+          margin-left: 15px;
+        }
+      }
+    }
+  }
+}
+
+// 分页
+.el-pagination {
+  padding: 15px 0 5px; text-align: center;
+}
+
+
+// 弹框表格
+.me-pop-table {
+  .el-dialog__header {
+    padding: 10px 20px 10px;
+    background-color: #50bfff40;
+  }
+
+  .el-input--mini .el-input__inner {
+    height: 29px;
+    line-height: 29px;
+  }
+
+  .el-dialog__headerbtn {
+    top: 13px;
+  }
+
+  .el-dialog--center .el-dialog__body {
+    padding: 2px 5px 10px;
+  }
+}
