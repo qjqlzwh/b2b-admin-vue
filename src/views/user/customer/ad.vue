@@ -27,7 +27,7 @@
           </el-input>
         </el-form-item>
         <el-form-item label="机构" prop="organization">
-          <el-input v-model="pobj.orgName" @click.native="orgDialogVisible = true" class="me-input-prefix" prefix-icon="el-icon-search" readonly>
+          <el-input v-model="pobj.orgName" @click.native="changeOrgDialogVisible(true)" class="me-input-prefix" prefix-icon="el-icon-search" readonly>
             <i slot="suffix" class="el-input__icon el-icon-circle-close" @click="pobj.organization=''; pobj.orgName=''" @click.stop></i>
           </el-input>
         </el-form-item>
@@ -70,9 +70,17 @@
               <el-input v-model="scope.row.detailedAddress" size="small" clearable></el-input>
             </template>
           </el-table-column>
-          <el-table-column prop="isEnabled" label="是否启用" width="130">
+          <el-table-column prop="isEnabled" label="是否启用" width="120">
             <template slot-scope="scope">
               <el-radio-group v-model="scope.row.isEnabled">
+                <el-radio :label="true">是</el-radio>
+                <el-radio :label="false">否</el-radio>
+              </el-radio-group>
+            </template>
+          </el-table-column>
+          <el-table-column prop="isDefault" label="是否默认" width="120">
+            <template slot-scope="scope">
+              <el-radio-group v-model="scope.row.isDefault">
                 <el-radio :label="true">是</el-radio>
                 <el-radio :label="false">否</el-radio>
               </el-radio-group>
@@ -98,7 +106,7 @@
 import { save, update, detail } from '@/api/user/customer'
 import { allArea } from '@/api/base/area'
 
-import OrgPop from '@/views/base/organization/orgPop'
+import OrgPop from '@/views/base/organization/org-pop'
 import UserPop from '@/views/user/usercenter/userPop'
 
 export default {
@@ -119,7 +127,7 @@ export default {
         orgName: '',
         salesman: '',
         salesmanName: '',
-        isEnabled: 'true',
+        isEnabled: true,
         customerAddressList: []
       },
       rules: {
@@ -225,7 +233,8 @@ export default {
     },
     addRow(rows) {
       rows.push({
-        isEnabled: true
+        isEnabled: true,
+        isDefault: false
       })
     }
   }

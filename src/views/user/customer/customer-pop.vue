@@ -1,13 +1,15 @@
 <template>
   <!--  弹框  -->
-  <el-dialog title="选择用户" class="me-pop-table" top="6vh" center @close="closePop" :visible.sync="userDialogVisible">
+  <el-dialog title="选择客户" class="me-pop-table" top="6vh" width="60%" center @close="closePop" :visible.sync="customerDialogVisible">
     <div class="filter-container">
       <el-button type="success" size="mini" icon="el-icon-thumb" @click="confirm">确认</el-button>
       <el-button type="primary" size="mini" icon="el-icon-search" @click="doPopSearch">搜索</el-button>
-      <el-input v-model="listQuery.username" placeholder="用户名" title="用户名" size="mini" clearable style="width: 200px;" class="filter-item" @keyup.enter.native="doPopSearch" />
-      <el-select v-model="listQuery.isEnabled" placeholder="状态" title="状态" size="mini" clearable style="width: 90px" class="filter-item">
-        <el-option v-for="item in statusOptions" :key="item.key" :label="item.val" :value="item.key" />
-      </el-select>
+      <el-tooltip content="客户名称" placement="bottom" effect="light" >
+        <el-input v-model="listQuery.dname" placeholder="客户名称" size="mini" clearable class="filter-item" @keyup.enter.native="doPopSearch" />
+      </el-tooltip>
+      <el-tooltip content="客户编码" placement="bottom" effect="light" >
+        <el-input v-model="listQuery.dcode" placeholder="客户编码" size="mini" clearable class="filter-item" @keyup.enter.native="doPopSearch" />
+      </el-tooltip>
     </div>
 
     <el-table
@@ -29,15 +31,30 @@
       highlight-current-row
     >
       <el-table-column type="selection" width="45" align="center"></el-table-column>
-      <el-table-column fixed label="用户名" align="center">
+      <el-table-column fixed label="客户" align="center">
         <template slot-scope="scope">
-          {{ scope.row.username }}
+          {{ scope.row.dname }}
         </template>
       </el-table-column>
-      <el-table-column fixed label="状态" width="100" align="center">
+      <el-table-column label="客户编码" align="center">
         <template slot-scope="scope">
-          <el-tag size="small" :type="scope.row.isEnabled ? 'success' : 'danger'">
-            {{ scope.row.isEnabled ? '启用' : '禁用' }}
+          {{ scope.row.dcode }}
+        </template>
+      </el-table-column>
+      <el-table-column label="机构" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.organization_name }}
+        </template>
+      </el-table-column>
+      <el-table-column label="业务员" width="130" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.salesman_name }}
+        </template>
+      </el-table-column>
+      <el-table-column label="状态" width="80" align="center">
+        <template slot-scope="scope">
+          <el-tag size="small" :type="scope.row.is_enabled ? 'success' : 'danger'">
+            {{ scope.row.is_enabled ? '启用' : '禁用' }}
           </el-tag>
         </template>
       </el-table-column>
@@ -61,14 +78,14 @@
 
 <script>
 
-import { getList } from '@/api/user/usercenter'
+import { getPopList } from '@/api/user/customer'
 
 export default {
   // 声明接收的父属性
   props: {
-    userDialogVisible: Boolean,
-    changeUserDialogVisible: Function,
-    userPopCallback: Function
+    customerDialogVisible: Boolean,
+    changeCustomerDialogVisible: Function,
+    customerPopCallback: Function
   },
   data() {
     return {
@@ -82,8 +99,7 @@ export default {
       },
       listQuery: {
         page: 1,
-        limit: 50,
-        userType: 0
+        limit: 50
       },
       statusOptions: [
         { key: 'true', val: '启用' },
@@ -92,11 +108,6 @@ export default {
     }
   },
   created() {
-    if (this.$route.params && this.$route.params.id) {
-      this.getDict(this.$route.params.id)
-    }
-  },
-  mounted() {
     this.doPopSearch()
   },
   methods: {
@@ -104,7 +115,7 @@ export default {
     confirm() {
       const rows = this.$refs.tb.selection
       if (rows.length > 0) {
-        this.userPopCallback(rows)
+        this.customerPopCallback(rows)
         this.closePop()
       } else {
         this.$message.info('请先选中一行再确认！')
@@ -126,7 +137,7 @@ export default {
       this.$refs.tb.clearSelection()
     },
     closePop() {
-      this.changeUserDialogVisible(false)
+      this.changeCustomerDialogVisible(false)
     },
     doPopSearch() { // 搜索
       this.listQuery.page = 1
@@ -134,7 +145,7 @@ export default {
     },
     fetchPopData() { // 查数据
       this.listLoading = true
-      getList(this.listQuery).then(response => {
+      getPopList(this.listQuery).then(response => {
         this.listData = response.data.records
         this.page.total = response.data.total
         this.listLoading = false

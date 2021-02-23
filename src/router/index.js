@@ -106,6 +106,56 @@ export const constantRoutes = [
   },
 
   {
+    path: '/order',
+    component: Layout,
+    redirect: '/order',
+    name: '订单管理',
+    meta: { title: '订单管理', icon: 'el-icon-s-order' },
+    children: [
+      {
+        path: '/order/list',
+        name: '订单',
+        component: () => import('@/views/order/order/index'),
+        meta: { title: '订单' }
+      },
+      {
+        path: '/order/add',
+        name: '添加订单',
+        component: () => import('@/views/order/order/ad'),
+        meta: { title: '添加订单' },
+        hidden: true
+      },
+      {
+        path: '/order/detail/:id',
+        name: '编辑订单',
+        component: () => import('@/views/order/order/ad'),
+        meta: { title: '编辑订单' },
+        hidden: true
+      },
+      {
+        path: '/customer/list',
+        name: '客户',
+        component: () => import('@/views/user/customer/index'),
+        meta: { title: '客户' }
+      },
+      {
+        path: '/customer/add',
+        name: '添加客户',
+        component: () => import('@/views/user/customer/ad'),
+        meta: { title: '添加客户' },
+        hidden: true
+      },
+      {
+        path: '/customer/detail/:id',
+        name: '编辑客户',
+        component: () => import('@/views/user/customer/ad'),
+        meta: { title: '编辑客户' },
+        hidden: true
+      }
+    ]
+  },
+
+  {
     path: '/product',
     component: Layout,
     redirect: '/product',
@@ -150,6 +200,26 @@ export const constantRoutes = [
         name: '编辑产品分类',
         component: () => import('@/views/product/category/ad'),
         meta: { title: '编辑产品分类' },
+        hidden: true
+      },
+      {
+        path: '/product-price/list',
+        name: '产品价格维护',
+        component: () => import('@/views/product/product-price/index'),
+        meta: { title: '产品价格维护' }
+      },
+      {
+        path: '/product-price/add',
+        name: '添加产品价格',
+        component: () => import('@/views/product/product-price/ad'),
+        meta: { title: '添加产品价格' },
+        hidden: true
+      },
+      {
+        path: '/product-price/detail/:id',
+        name: '编辑产品价格',
+        component: () => import('@/views/product/product-price/ad'),
+        meta: { title: '编辑产品价格' },
         hidden: true
       }
     ]

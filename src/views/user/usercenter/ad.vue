@@ -17,8 +17,8 @@
         </el-form-item>
         <el-form-item label="是否启用" prop="isEnabled">
           <el-radio-group v-model="pobj.isEnabled">
-            <el-radio border label="true">是</el-radio>
-            <el-radio border label="false">否</el-radio>
+            <el-radio border :label="true">是</el-radio>
+            <el-radio border :label="false">否</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="电话" prop="phone">
@@ -26,8 +26,8 @@
         </el-form-item>
         <el-form-item label="用户类型" prop="userType">
           <el-select v-model="pobj.userType" clearable >
-            <el-option label="内部用户" value="0"></el-option>
-            <el-option label="企业用户" value="1"></el-option>
+            <el-option label="内部用户" :value="0"></el-option>
+            <el-option label="企业用户" :value="1"></el-option>
           </el-select>
         </el-form-item>
 
@@ -111,8 +111,6 @@ export default {
       detail(id)
         .then(response => {
           this.pobj = response.data
-          this.pobj.userType = this.pobj.userType.toString()
-          this.pobj.isEnabled = this.pobj.isEnabled.toString()
         })
     },
     // 重置

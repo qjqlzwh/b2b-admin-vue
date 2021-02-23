@@ -40,7 +40,7 @@
 <script>
 
 import { save, update, detail } from '@/api/base/organization'
-import OrgPop from '@/views/base/organization/orgPop'
+import OrgPop from '@/views/base/organization/org-pop'
 
 export default {
   components: { OrgPop },
