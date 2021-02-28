@@ -1,11 +1,14 @@
 <template>
   <!--  弹框  -->
-  <el-dialog title="选择分类" class="me-pop-table" top="6vh" center @close="closePop" :visible.sync="categoryDialogVisible">
+  <el-dialog title="选择产品" class="me-pop-table" top="6vh" width="60%" center @close="closePop" :visible.sync="productDialogVisible">
     <div class="filter-container">
       <el-button type="success" size="mini" icon="el-icon-thumb" @click="confirm">确认</el-button>
       <el-button type="primary" size="mini" icon="el-icon-search" @click="doPopSearch">搜索</el-button>
-      <el-tooltip content="分类名称" placement="bottom" effect="light">
-        <el-input v-model="listQuery.dname" placeholder="分类名称" size="mini" clearable style="width: 200px;" class="filter-item" @keyup.enter.native="doPopSearch" />
+      <el-tooltip content="产品名称" placement="bottom" effect="light">
+        <el-input v-model="listQuery.dname" placeholder="产品名称" size="mini" clearable class="filter-item" @keyup.enter.native="doPopSearch" />
+      </el-tooltip>
+      <el-tooltip content="产品编码" placement="bottom" effect="light">
+        <el-input v-model="listQuery.dcode" placeholder="产品编码" size="mini" clearable class="filter-item" @keyup.enter.native="doPopSearch" />
       </el-tooltip>
     </div>
 
@@ -26,18 +29,21 @@
       fit
       lazy
       highlight-current-row
-      :load="loadChild"
-      :tree-props="{children: 'childCategory', hasChildren: 'hasChild'}"
     >
       <el-table-column type="selection" width="45" align="center"></el-table-column>
-      <el-table-column fixed label="分类名称" align="left" width="150">
+      <el-table-column fixed label="产品名称" align="center">
         <template slot-scope="scope">
           {{ scope.row.dname }}
         </template>
       </el-table-column>
-      <el-table-column fixed label="分类全称" align="center">
+      <el-table-column label="产品编码" width="145" align="center">
         <template slot-scope="scope">
-          {{ scope.row.fullName }}
+          {{ scope.row.dcode }}
+        </template>
+      </el-table-column>
+      <el-table-column label="产品型号" width="165" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.model }}
         </template>
       </el-table-column>
     </el-table>
@@ -52,7 +58,7 @@
       :total="page.total"
       :pager-count="page.pagerCount"
       layout="total, sizes, prev, pager, next, jumper"
-      @current-change="fetchCategoryPopData"
+      @current-change="fetchPopData"
       @size-change="doPopSearch"
     />
   </el-dialog>
@@ -60,14 +66,14 @@
 
 <script>
 
-import { getList, getChild } from '@/api/product/category'
+import { getPopList } from '@/api/product/product'
 
 export default {
   // 声明接收的父属性
   props: {
-    categoryDialogVisible: Boolean,
-    changeCategoryDialogVisible: Function,
-    categoryPopCallback: Function
+    productDialogVisible: Boolean,
+    changeProductDialogVisible: Function,
+    productPopCallback: Function
   },
   data() {
     return {
@@ -93,7 +99,7 @@ export default {
     confirm() {
       const rows = this.$refs.tb.selection
       if (rows.length > 0) {
-        this.categoryPopCallback(rows)
+        this.productPopCallback(rows)
         this.closePop()
       } else {
         this.$message.info('请先选中一行再确认！')
@@ -115,27 +121,19 @@ export default {
       this.$refs.tb.clearSelection()
     },
     closePop() {
-      this.changeCategoryDialogVisible(false)
+      this.changeProductDialogVisible(false)
     },
     doPopSearch() { // 搜索
       this.listQuery.page = 1
-      this.fetchCategoryPopData()
+      this.fetchPopData()
     },
-    fetchCategoryPopData() { // 查数据
+    fetchPopData() { // 查数据
       this.listLoading = true
-      getList(this.listQuery).then(response => {
+      getPopList(this.listQuery).then(response => {
         this.listData = response.data.records
         this.page.total = response.data.total
         this.listLoading = false
       })
-    },
-    // 加载子项
-    loadChild(tree, treeNode, resolve) {
-      setTimeout(() => {
-        getChild(tree.id).then(response => {
-          resolve(response.data)
-        })
-      }, 100)
     }
   }
 }

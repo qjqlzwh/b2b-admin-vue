@@ -24,9 +24,9 @@ export function update(params) {
   })
 }
 
-export function getDict(id) {
+export function detail(id) {
   return request({
-    url: `/cow-base/dict/getDict/${id}`,
+    url: `/cow-base/dict/detail/${id}`,
     method: 'get'
     // headers: { 'content-type': 'application/json' },
   })

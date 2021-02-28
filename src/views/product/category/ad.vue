@@ -12,13 +12,15 @@
         <el-form-item label="分类名称" prop="dname">
           <el-input v-model="pobj.dname" clearable></el-input>
         </el-form-item>
-        <el-form-item label="上级分类" prop="parentId">
-          <el-input v-model="pobj.parentName" @click.native="categoryDialogVisible = true" class="me-input-prefix" prefix-icon="el-icon-search" readonly>
+        <el-form-item label="上级分类">
+          <el-input v-model="pobj.parentName" @click.native="changeCategoryDialogVisible(true)" class="me-input-prefix" prefix-icon="el-icon-search" readonly>
             <i slot="suffix" class="el-input__icon el-icon-circle-close" @click="pobj.parentId=''; pobj.parentName=''" @click.stop></i>
           </el-input>
         </el-form-item>
       </el-form>
     </el-card>
+
+    <CategoryPop v-if="categoryDialogVisible" :categoryDialogVisible="categoryDialogVisible" :changeCategoryDialogVisible="changeCategoryDialogVisible" :categoryPopCallback="categoryPopCallback"></CategoryPop>
 
   </div>
 </template>
@@ -27,8 +29,12 @@
 
 import { save, update, detail } from '@/api/product/category'
 
+import CategoryPop from '@/views/product/category/category-pop'
+
 export default {
-  components: { },
+  components: {
+    CategoryPop
+  },
   data() {
     return {
       categoryDialogVisible: false,
@@ -41,9 +47,6 @@ export default {
         dname: [
           { required: true, message: '请输入产品分类名称', trigger: 'blur' },
           { min: 2, max: 50, message: '长度多于 2 个字符', trigger: 'blur' }
-        ],
-        parentId: [
-          { required: true, message: '请选择产品分类' }
         ]
       }
     }

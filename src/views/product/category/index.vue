@@ -27,31 +27,33 @@
       fit
       lazy
       highlight-current-row
+      :load="loadChild"
+      :tree-props="{children: 'childCategory', hasChildren: 'hasChild'}"
     >
       <el-table-column type="selection" width="45" align="center"></el-table-column>
-      <el-table-column fixed label="分类名称" width="180" align="center">
+      <el-table-column fixed label="分类名称" width="180" align="left">
         <template slot-scope="scope">
           {{ scope.row.dname }}
         </template>
       </el-table-column>
-      <el-table-column label="分类全称" width="250" align="center">
+      <el-table-column label="分类全称" width="300" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.dcode }}</span>
+          <span>{{ scope.row.fullName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" width="160" align="center">
+      <el-table-column label="创建时间" width="170" align="center">
         <template slot-scope="scope">
           <i class="el-icon-time" />
           {{ scope.row.createTime }}
         </template>
-      </el-table-column>
-      <el-table-column label="最后修改时间" width="160" align="center">
+      </el-table-column>5
+      <el-table-column label="最后修改时间" width="170" align="center">
         <template slot-scope="scope">
           <i class="el-icon-time" />
           {{ scope.row.updateTime }}
         </template>
       </el-table-column>
-      <el-table-column fixed="right" label="操作" width="100">
+      <el-table-column label="操作" width="100">
         <template slot-scope="scope">
           <router-link :to="'/category/detail/'+scope.row.id" class="link-type">
             <el-button class="filter-item" style="padding: 5px 9px;" type="primary" plain size="mini" round icon="el-icon-edit-outline">编辑</el-button>
@@ -76,7 +78,7 @@
 </template>
 
 <script>
-import { getList } from '@/api/product/category'
+import { getChild, getList } from '@/api/product/category'
 
 export default {
   filters: {
@@ -118,6 +120,14 @@ export default {
         this.page.total = response.data.total
         this.listLoading = false
       })
+    },
+    // 加载子项
+    loadChild(tree, treeNode, resolve) {
+      setTimeout(() => {
+        getChild(tree.id).then(response => {
+          resolve(response.data)
+        })
+      }, 100)
     }
   }
 }

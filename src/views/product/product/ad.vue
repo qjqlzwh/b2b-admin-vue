@@ -15,15 +15,15 @@
         <el-form-item label="产品编码" prop="dcode">
           <el-input v-model="pobj.dcode" :disabled="true"></el-input>
         </el-form-item>
-        <el-form-item label="是否上架" prop="isEnabled">
-          <el-radio-group v-model="pobj.isEnabled">
+        <el-form-item label="是否上架" prop="isShelves">
+          <el-radio-group v-model="pobj.isShelves">
             <el-radio border :label="true">是</el-radio>
             <el-radio border :label="false">否</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="产品分类" prop="parentId">
-          <el-input v-model="pobj.categoryName" @click.native="categoryDialogVisible = true" class="me-input-prefix" prefix-icon="el-icon-search" readonly>
-            <i slot="suffix" class="el-input__icon el-icon-circle-close" @click="pobj.category=''; pobj.categoryName=''" @click.stop></i>
+        <el-form-item label="产品分类" prop="category">
+          <el-input v-model="pobj.categoryName" @click.native="changeCategoryDialogVisible(true)" class="me-input-prefix" prefix-icon="el-icon-search" readonly>
+<!--            <i slot="suffix" class="el-input__icon el-icon-circle-close" @click="pobj.category=''; pobj.categoryName=''" @click.stop></i>-->
           </el-input>
         </el-form-item>
         <el-form-item label="产品型号">
@@ -35,6 +35,8 @@
       </el-form>
     </el-card>
 
+    <CategoryPop v-if="categoryDialogVisible" :categoryDialogVisible="categoryDialogVisible" :changeCategoryDialogVisible="changeCategoryDialogVisible" :categoryPopCallback="categoryPopCallback"></CategoryPop>
+
   </div>
 </template>
 
@@ -42,8 +44,12 @@
 
 import { save, update, detail } from '@/api/product/product'
 
+import CategoryPop from '@/views/product/category/category-pop'
+
 export default {
-  components: { },
+  components: {
+    CategoryPop
+  },
   data() {
     return {
       categoryDialogVisible: false,
@@ -54,17 +60,17 @@ export default {
         categoryName: '',
         model: '',
         unit: '',
-        isEnabled: true
+        isShelves: true
       },
       rules: {
         dname: [
           { required: true, message: '请输入产品名称', trigger: 'blur' },
           { min: 2, max: 50, message: '长度多于 2 个字符', trigger: 'blur' }
         ],
-        dcode: [
-          { required: true, message: '请输入产品编码' }
+        category: [
+          { required: true, message: '产品分类不能为空' }
         ],
-        isEnabled: [
+        isShelves: [
           { required: true, message: '是否上架' }
         ]
       }

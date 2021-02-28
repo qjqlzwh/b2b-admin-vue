@@ -18,8 +18,8 @@
         <br>
         <el-form-item label="是否启用" prop="isEnabled">
           <el-radio-group v-model="pobj.isEnabled">
-            <el-radio border label="true">是</el-radio>
-            <el-radio border label="false">否</el-radio>
+            <el-radio border :label="true">是</el-radio>
+            <el-radio border :label="false">否</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="排序" prop="sort">
@@ -52,8 +52,8 @@
           <el-table-column prop="isEnabled" label="是否启用" width="150">
             <template slot-scope="scope">
               <el-radio-group v-model="scope.row.isEnabled">
-                <el-radio label="true">是</el-radio>
-                <el-radio label="false">否</el-radio>
+                <el-radio :label="true">是</el-radio>
+                <el-radio :label="false">否</el-radio>
               </el-radio-group>
             </template>
           </el-table-column>
@@ -75,7 +75,7 @@
 
 <script>
 
-import { save, update, getDict } from '@/api/base/dict'
+import { save, update, detail } from '@/api/base/dict'
 
 export default {
   data() {
@@ -83,7 +83,7 @@ export default {
       pobj: {
         dname: '',
         dcode: '',
-        isEnabled: 'true',
+        isEnabled: true,
         childDict: []
       },
       rules: {
@@ -103,7 +103,7 @@ export default {
   },
   created() {
     if (this.$route.params && this.$route.params.id) {
-      this.getDict(this.$route.params.id)
+      this.getDetail(this.$route.params.id)
     }
   },
   methods: {
@@ -159,18 +159,18 @@ export default {
     },
     addRow(rows) {
       rows.push({
-        isEnabled: 'true'
+        isEnabled: true
       })
     },
     // 根据id获取字典
-    getDict(id) {
-      getDict(id)
+    getDetail(id) {
+      detail(id)
         .then(response => {
           this.pobj = response.data
-          this.pobj.isEnabled = this.pobj.isEnabled.toString()
-          this.pobj.childDict.filter(item => {
-            item.isEnabled = item.isEnabled.toString()
-          })
+          // this.pobj.isEnabled = this.pobj.isEnabled.toString()
+          // this.pobj.childDict.filter(item => {
+          //   item.isEnabled = item.isEnabled.toString()
+          // })
         })
     }
   }

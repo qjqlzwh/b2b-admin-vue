@@ -13,7 +13,7 @@
       </el-tooltip>
       <el-tooltip content="状态" placement="top" effect="light">
         <el-select v-model="listQuery.state" placeholder="状态" size="medium" clearable style="width: 100px" class="filter-item">
-          <el-option v-for="item in statusOptions" :key="item.key" :label="item.val" :value="item.key" />
+          <el-option v-for="(value, key) in statusOptions" :key="key" :label="value" :value="key" />
         </el-select>
       </el-tooltip>
       <el-tooltip content="业务员" placement="bottom" effect="light">
@@ -52,47 +52,50 @@
       </el-table-column>
       <el-table-column label="订单金额" min-width="150" align="center">
         <template slot-scope="scope">
-          {{ scope.row.totalPrice }}
+          <span style="color: red">
+            <i class="el-icon-money"></i>
+            {{ scope.row.totalPrice }}
+          </span>
         </template>
       </el-table-column>
       <el-table-column class-name="status-col" label="状态" width="110" align="center">
         <template slot-scope="scope">
           <el-tag size="small" :type="scope.row.state | statusFilter">
-            {{ statusOptions.get(scope.row.state) }}
+            {{ statusOptions[scope.row.state] }}
           </el-tag>
         </template>
       </el-table-column>
       <el-table-column class-name="status-col" label="订单类型" width="110" align="center">
         <template slot-scope="scope">
-            {{ orderTypeOptions.get(scope.row.orderType) }}
+          {{ orderTypeOptions[scope.row.orderType] }}
         </template>
       </el-table-column>
-      <el-table-column label="业务员" min-width="150" align="center">
+      <el-table-column label="业务员" min-width="130" align="center">
         <template slot-scope="scope">
           {{ scope.row.salesmanName }}
         </template>
       </el-table-column>
-      <el-table-column label="机构" min-width="150" align="center">
+      <el-table-column label="机构" min-width="130" align="center">
         <template slot-scope="scope">
           {{ scope.row.orgName }}
         </template>
       </el-table-column>
-      <el-table-column label="收货人" min-width="150" align="center">
+      <el-table-column label="收货人" min-width="130" align="center">
         <template slot-scope="scope">
           {{ scope.row.shConsignee }}
         </template>
       </el-table-column>
-      <el-table-column label="收货人电话" min-width="150" align="center">
+      <el-table-column label="收货人电话" min-width="130" align="center">
         <template slot-scope="scope">
           {{ scope.row.shPhone }}
         </template>
       </el-table-column>
-      <el-table-column label="收货省市区" min-width="150" align="center">
+      <el-table-column label="收货省市区" min-width="150" align="center" show-overflow-tooltip>
         <template slot-scope="scope">
           {{ scope.row.shProvince + scope.row.shCity + scope.row.shDistrict }}
         </template>
       </el-table-column>
-      <el-table-column label="收货地址" min-width="150" align="center">
+      <el-table-column label="收货地址" min-width="150" align="center" show-overflow-tooltip>
         <template slot-scope="scope">
           {{ scope.row.shDetailedAddress }}
         </template>
@@ -103,7 +106,7 @@
           {{ scope.row.createTime }}
         </template>
       </el-table-column>
-      <el-table-column label="备注" min-width="150" align="center">
+      <el-table-column label="备注" min-width="150" align="center" show-overflow-tooltip>
         <template slot-scope="scope">
           {{ scope.row.memo }}
         </template>
@@ -159,16 +162,16 @@ export default {
         page: 1,
         limit: 50
       },
-      statusOptions: [
-        { key: '0', val: '已保存' },
-        { key: '1', val: '已提交' },
-        { key: '2', val: '已审核' },
-        { key: '3', val: '已取消' }
-      ],
-      orderTypeOptions: [
-        { key: '0', val: '普通订单' },
-        { key: '1', val: '现金订单' }
-      ]
+      statusOptions: {
+        '0': '已保存',
+        '1': '已提交',
+        '2': '已审核',
+        '3': '已取消'
+      },
+      orderTypeOptions: {
+        '0': '普通订单',
+        '1': '现金订单'
+      }
     }
   },
   created() {

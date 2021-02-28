@@ -34,20 +34,20 @@
       highlight-current-row
     >
       <el-table-column type="selection" width="45" align="center"></el-table-column>
-      <el-table-column fixed label="产品名称" width="180" align="center">
+      <el-table-column fixed label="产品名称" align="center">
         <template slot-scope="scope">
           {{ scope.row.dname }}
         </template>
       </el-table-column>
-      <el-table-column label="产品编码" width="250" align="center">
+      <el-table-column label="产品编码" width="150" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.dcode }}</span>
         </template>
       </el-table-column>
       <el-table-column class-name="status-col" label="是否上架" width="80" align="center">
         <template slot-scope="scope">
-          <el-tag size="small" :type="scope.row.isEnabled | statusFilter">
-            {{ scope.row.isEnabled ? '上架' : '下架' }}
+          <el-tag size="small" :type="scope.row.isShelves | statusFilter">
+            {{ scope.row.isShelves ? '上架' : '下架' }}
           </el-tag>
         </template>
       </el-table-column>

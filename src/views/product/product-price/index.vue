@@ -12,8 +12,8 @@
         <el-input v-model="listQuery.dname" placeholder="价目表名称" size="medium" clearable class="filter-item" @keyup.enter.native="doSearch" />
       </el-tooltip>
       <el-tooltip content="状态" placement="right" effect="light">
-        <el-select v-model="listQuery.isEnabled" placeholder="状态" size="medium" clearable style="width: 105px" class="filter-item">
-          <el-option v-for="item in statusOptions" :key="item.key" :label="item.val" :value="item.key" />
+        <el-select v-model="listQuery.state" placeholder="状态" size="medium" clearable style="width: 105px" class="filter-item">
+          <el-option v-for="(value, key) in statusOptions" :key="key" :label="value" :value="key" />
         </el-select>
       </el-tooltip>
     </div>
@@ -49,7 +49,7 @@
       </el-table-column>
       <el-table-column label="状态" min-width="100" align="center">
         <template slot-scope="scope">
-          {{ statusOptions.get(scope.row.state) }}
+          {{ statusOptions[scope.row.state] }}
         </template>
       </el-table-column>
       <el-table-column label="开始时间" min-width="150" align="center">
@@ -125,12 +125,12 @@ export default {
         page: 1,
         limit: 50
       },
-      statusOptions: [
-        { key: '0', val: '已保存' },
-        { key: '1', val: '审核中' },
-        { key: '2', val: '已审核' },
-        { key: '3', val: '已取消' }
-      ]
+      statusOptions: {
+        '0': '已保存',
+        '1': '审核中',
+        '2': '已审核',
+        '3': '已取消'
+      }
     }
   },
   created() {

@@ -4,11 +4,12 @@
       <div slot="header" class="clearfix">
         <span>{{ $route.name }}</span>
         <div class="me-right">
-          <el-button type="primary" icon="el-icon-check" size="mini" @click="saveOrUpdate('pobj')">保存</el-button>
+          <el-button v-if="pobj.state != '' && pobj.state == 0" type="success" icon="el-icon-s-check" size="mini" @click="toAudit('pobj')">审核</el-button>
+          <el-button v-if="pobj.state == '' || pobj.state == 0" type="primary" icon="el-icon-check" size="mini" @click="saveOrUpdate('pobj')">保存</el-button>
           <el-button type="info" icon="el-icon-refresh" size="mini" @click="resetForm()">重置</el-button>
         </div>
       </div>
-      <el-form :model="pobj" :rules="rules" :inline="true" ref="pobj" label-width="100px" size="small">
+      <el-form :model="pobj" :rules="rules" :inline="true" :disabled="formGlobalDisable" ref="pobj" label-width="100px" size="small">
         <el-form-item label="单号">
           <el-input v-model="pobj.sn" disabled></el-input>
         </el-form-item>
@@ -57,6 +58,7 @@
           </el-table-column>
           <el-table-column prop="isEnabled" label="行状态" width="120">
             <template slot-scope="scope">
+              {{ scope.row.state != null ? statusOptions[scope.row.state] : '' }}
             </template>
           </el-table-column>
           <el-table-column prop="memo" label="失效时间" width="160">
@@ -66,7 +68,8 @@
           </el-table-column>
           <el-table-column label="操作" width="150" >
             <template slot-scope="scope">
-              <el-button type="danger" plain icon="el-icon-delete" size="mini" round @click.native.prevent="deleteRow(scope.$index, pobj.customerItem)">删除</el-button>
+              <el-button v-show="scope.row.state == 2" type="danger" plain size="mini" round @click.native.prevent="toInvalidCustomer(scope.row.id)">失效</el-button>
+              <el-button v-show="scope.row.state == 1" type="danger" size="mini" round @click.native.prevent="deleteRow(scope.$index, pobj.customerItem)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -74,34 +77,34 @@
         <div class="me-inner-title">
           <p>
             <span>添加产品</span>
-            <el-button type="primary" round size="mini" icon="el-icon-plus" @click.native.prevent="addRow(pobj.productItem)">添加</el-button>
+            <el-button type="primary" round size="mini" icon="el-icon-plus" @click.native.prevent="changeProductDialogVisible(true)">添加</el-button>
           </p>
         </div>
         <el-table :data="pobj.productItem" border size="mini" style="width: 100%">
           <el-table-column fixed type="index" width="50" align="center"></el-table-column>
-          <el-table-column prop="dname" label="产品名称" width="200">
+          <el-table-column prop="productName" label="产品名称" min-width="250">
             <template slot-scope="scope">
               {{ scope.row.productName }}
             </template>
           </el-table-column>
-          <el-table-column prop="secondCode" label="产品编码" width="200">
+          <el-table-column label="产品编码" width="150">
             <template slot-scope="scope">
               {{ scope.row.productCode }}
             </template>
           </el-table-column>
-          <el-table-column prop="secondCode" label="价格" width="155">
+          <el-table-column label="价格" width="155">
             <template slot-scope="scope">
               <el-input-number size="small" v-model="scope.row.price" :min="0.01" label="价格"></el-input-number>
             </template>
           </el-table-column>
-          <el-table-column prop="secondCode" label="数量" width="155">
+          <el-table-column label="数量" width="155">
             <template slot-scope="scope">
               <el-input-number size="small" v-model="scope.row.quantity" :min="1" label="数量"></el-input-number>
             </template>
           </el-table-column>
-          <el-table-column prop="isEnabled" label="行状态" width="100">
+          <el-table-column prop="state" label="行状态" width="100">
             <template slot-scope="scope">
-<!--              {{ statusOptions.get(scope.row.state) }}-->
+              {{ scope.row.state != null ? statusOptions[scope.row.state] : '' }}
             </template>
           </el-table-column>
           <el-table-column prop="memo" label="失效时间" width="150">
@@ -109,10 +112,10 @@
               {{ scope.row.invalidTime }}
             </template>
           </el-table-column>
-          <el-table-column label="操作" width="150" fixed="right">
+          <el-table-column label="操作" width="80" fixed="right">
             <template slot-scope="scope">
-              <el-button type="danger" plain size="mini" round @click.native.prevent="deleteRow(scope.$index, pobj.productItem)">失效</el-button>
-              <el-button type="danger" size="mini" round @click.native.prevent="deleteRow(scope.$index, pobj.productItem)">删除</el-button>
+              <el-button :disabled="formGlobalDisableElse" v-show="scope.row.state == 2" type="danger" size="mini" round @click.native.prevent="toInvalidProduct(scope.row.id)">失效</el-button>
+              <el-button v-show="scope.row.state == 1" type="danger" size="mini" round @click.native.prevent="deleteRow(scope.$index, pobj.productItem)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -123,35 +126,38 @@
 
     <CustomerPop v-if="customerDialogVisible" :customerDialogVisible="customerDialogVisible" :changeCustomerDialogVisible="changeCustomerDialogVisible" :customerPopCallback="customerPopCallback"></CustomerPop>
 
-    <CustomerAddressPop v-if="customerAddrDialogVisible" :customerAddrDialogVisible="customerAddrDialogVisible" :changeCustomerAddrDialogVisible="changeCustomerAddrDialogVisible" :customerAddrPopCallback="customerAddrPopCallback" :customerId="pobj.customer"></CustomerAddressPop>
+    <ProductPop v-if="productDialogVisible" :productDialogVisible="productDialogVisible" :changeProductDialogVisible="changeProductDialogVisible" :productPopCallback="productPopCallback"></ProductPop>
+
   </div>
 </template>
 
 <script>
 
-import { save, update } from '@/api/product/product-price'
+import { save, update, detail, audit, invalidProduct, invalidCustomer } from '@/api/product/product-price'
 
 import OrgPop from '@/views/base/organization/org-pop'
 import CustomerPop from '@/views/user/customer/customer-pop'
-import CustomerAddressPop from '@/views/user/customer/customer-address-pop'
+import ProductPop from '@/views/product/product/product-pop'
 
 export default {
   components: {
     OrgPop,
     CustomerPop,
-    CustomerAddressPop
+    ProductPop
   },
   data() {
     return {
+      formGlobalDisable: false, // 全局禁用表单
+      formGlobalDisableElse: true, // 全局禁用表单
       orgDialogVisible: false,
       customerDialogVisible: false,
-      customerAddrDialogVisible: false,
-      statusOptions: [
-        { key: '0', val: '已保存' },
-        { key: '1', val: '审核中' },
-        { key: '2', val: '已审核' },
-        { key: '3', val: '已取消' }
-      ],
+      productDialogVisible: false,
+      statusOptions: {
+        '0': '已保存',
+        '1': '审核中',
+        '2': '已审核',
+        '3': '已取消'
+      },
       pobj: {
         id: '',
         sn: '',
@@ -181,7 +187,7 @@ export default {
   },
   created() {
     if (this.$route.params && this.$route.params.id) {
-      this.getDict(this.$route.params.id)
+      this.getDetail(this.$route.params.id)
     }
   },
   methods: {
@@ -200,7 +206,7 @@ export default {
     },
     // 选择客户回调
     customerPopCallback(data) {
-      for (let item of data) {
+      for (const item of data) {
         this.pobj.customerItem.push({
           customer: item.id,
           customerName: item.dname,
@@ -208,24 +214,19 @@ export default {
         })
       }
     },
-    // 改变客户地址弹框可见
-    changeCustomerAddrDialogVisible(boo) {
-      if (!this.pobj.customer) {
-        this.$message.warning('请先选择客户')
-        return false
-      }
-      this.customerAddrDialogVisible = boo
+    // 改变产品弹框可见
+    changeProductDialogVisible(boo) {
+      this.productDialogVisible = boo
     },
-    // 选择客户地址回调
-    customerAddrPopCallback(data) {
-      const addr = data[0]
-      this.pobj.customerAddress = addr.id
-      this.pobj.shConsignee = addr.consignee
-      this.pobj.shPhone = addr.phone
-      this.pobj.shProvince = addr.province
-      this.pobj.shCity = addr.city
-      this.pobj.shDistrict = addr.district
-      this.pobj.shDetailedAddress = addr.detailedAddress
+    // 选择产品回调
+    productPopCallback(data) {
+      for (const item of data) {
+        this.pobj.productItem.push({
+          product: item.id,
+          productName: item.dname,
+          productCode: item.dcode
+        })
+      }
     },
     // 改变生效时间
     changeValidTime() {
@@ -266,7 +267,7 @@ export default {
           // 添加成功
           this.$message.success('添加成功')
           // 回到列表
-          this.$router.push({ path: '/dict/list' })
+          this.$router.push({ path: '/product-price/list' })
         })
     },
     toUpdate() {
@@ -275,7 +276,54 @@ export default {
           // 更新成功
           this.$message.success('更新成功')
           // 回到列表
-          this.$router.push({ path: '/dict/list' })
+          this.$router.push({ path: '/product-price/list' })
+        })
+    },
+    getDetail(id) {
+      detail(id)
+        .then(response => {
+          this.pobj = response.data
+          this.pobj.validTime = [this.pobj.startTime, this.pobj.endTime]
+          if (this.pobj.state !== 0) {
+            this.formGlobalDisable = true
+          }
+        })
+    },
+    toAudit(formObj) { // 审核
+      this.$refs[formObj].validate((valid) => {
+        if (valid) {
+          this.$confirm('是否确定审核?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'success'
+          }).then(() => {
+            audit(this.pobj)
+              .then(response => {
+                this.$message.success(response.message)
+                this.$router.push({ path: '/product-price/list' })
+              })
+          })
+        } else {
+          return false
+        }
+      })
+    },
+    // 失效产品行
+    toInvalidProduct(id) {
+      const param = { 'productItemId': id }
+      invalidProduct(param)
+        .then(response => {
+          this.$message.success(response.message)
+          location.reload()
+        })
+    },
+    // 失效客户行
+    toInvalidCustomer(id) {
+      const param = { 'customerItemId': id }
+      invalidCustomer(param)
+        .then(response => {
+          this.$message.success(response.message)
+          location.reload()
         })
     },
     // 重置
@@ -287,11 +335,6 @@ export default {
     // 删除行
     deleteRow(index, rows) {
       rows.splice(index, 1)
-    },
-    addRow(rows) {
-      rows.push({
-        isEnabled: 'true'
-      })
     }
   }
 }

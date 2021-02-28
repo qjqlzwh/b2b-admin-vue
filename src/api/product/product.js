@@ -8,6 +8,24 @@ export function getList(params) {
   })
 }
 
+// 弹框列表数据
+export function getPopList(params) {
+  return request({
+    url: '/cow-product/product/popList',
+    method: 'get',
+    params
+  })
+}
+
+// 弹框列表数据(带价格)
+export function getPopPriceList(params) {
+  return request({
+    url: '/cow-product/product/popPriceList',
+    method: 'get',
+    params
+  })
+}
+
 export function save(params) {
   return request({
     url: '/cow-product/product/add',
