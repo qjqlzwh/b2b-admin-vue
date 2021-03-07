@@ -52,12 +52,12 @@
 
     <!-- 分页 -->
     <el-pagination
-      v-show="total>0"
+      v-show="page.total>0"
       background
       :current-page.sync="listQuery.page"
-      :page-sizes="[50, 100, 300, 500, 1000]"
+      :page-sizes="page.pageSizes"
       :page-size.sync="listQuery.limit"
-      :total="total"
+      :total="page.total"
       layout="total, sizes, prev, pager, next, jumper"
       @current-change="fetchData"
       @size-change="doSearch"
@@ -74,11 +74,14 @@ export default {
       list: null,
       listLoading: true,
       winHeight: window.innerHeight - 170,
-      total: 0,
+      page: {
+        total: 0,
+        pageSizes: this.$page.pageSizes
+      },
       listQuery: {
         page: 1,
-        limit: 50
-      }
+        limit: this.$page.limit
+      },
     }
   },
   created() {
