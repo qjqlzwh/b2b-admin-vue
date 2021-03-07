@@ -38,6 +38,11 @@ Vue.config.productionTip = false
 
 Vue.prototype.$qs = qs
 
+Vue.prototype.$page = {
+  pageSizes: [50, 100, 300, 500, 1000],
+  limit: 50
+}
+
 new Vue({
   el: '#app',
   router,

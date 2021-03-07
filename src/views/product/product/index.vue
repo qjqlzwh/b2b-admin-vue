@@ -34,7 +34,7 @@
       highlight-current-row
     >
       <el-table-column type="selection" width="45" align="center"></el-table-column>
-      <el-table-column fixed label="产品名称" align="center">
+      <el-table-column fixed label="产品名称" align="center" show-overflow-tooltip>
         <template slot-scope="scope">
           {{ scope.row.dname }}
         </template>

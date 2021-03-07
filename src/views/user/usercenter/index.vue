@@ -39,7 +39,7 @@
 <!--        </template>-->
 <!--      </el-table-column>-->
       <el-table-column type="selection" width="45" align="center"></el-table-column>
-      <el-table-column fixed label="用户名" width="160" align="center">
+      <el-table-column fixed label="用户名" min-width="160" align="center" show-overflow-tooltip>
         <template slot-scope="scope">
           {{ scope.row.username }}
         </template>

@@ -71,6 +71,7 @@ import { getPopList } from '@/api/product/product'
 export default {
   // 声明接收的父属性
   props: {
+    isSingle: Boolean, // 是否单选
     productDialogVisible: Boolean,
     changeProductDialogVisible: Function,
     productPopCallback: Function
@@ -83,11 +84,11 @@ export default {
       page: {
         pagerCount: 5,
         total: 0,
-        pageSizes: [50, 100, 300, 500, 1000]
+        pageSizes: this.$page.pageSizes
       },
       listQuery: {
         page: 1,
-        limit: 50
+        limit: this.$page.limit
       }
     }
   },
@@ -110,11 +111,13 @@ export default {
       this.$refs.tb.toggleRowSelection(val)
     },
     handleSelectionChange(val) {
-      if (val.length > 1) {
-        this.$refs.tb.clearSelection()
-        this.$refs.tb.toggleRowSelection(val.pop())
-      } else {
-        this.chek = val
+      if (this.isSingle) {
+        if (val.length > 1) {
+          this.$refs.tb.clearSelection()
+          this.$refs.tb.toggleRowSelection(val.pop())
+        } else {
+          this.chek = val
+        }
       }
     },
     onSelectAll() {

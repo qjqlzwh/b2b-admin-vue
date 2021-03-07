@@ -32,7 +32,7 @@
       highlight-current-row
     >
       <el-table-column type="selection" width="45" align="center"></el-table-column>
-      <el-table-column fixed label="客户名称" width="150" align="center">
+      <el-table-column fixed label="客户名称" width="150" align="center" show-overflow-tooltip>
         <template slot-scope="scope">
           {{ scope.row.dname }}
         </template>
@@ -42,17 +42,17 @@
           {{ scope.row.dcode }}
         </template>
       </el-table-column>
-      <el-table-column label="机构" min-width="150" align="center">
+      <el-table-column label="机构" min-width="150" align="center" show-overflow-tooltip>
         <template slot-scope="scope">
-          {{ scope.row.organization }}
+          {{ scope.row.organization_name }}
         </template>
       </el-table-column>
       <el-table-column label="业务员" min-width="150" align="center">
         <template slot-scope="scope">
-          {{ scope.row.salesman }}
+          {{ scope.row.salesman_name }}
         </template>
       </el-table-column>
-      <el-table-column class-name="status-col" label="是否启用" width="110" align="center">
+      <el-table-column class-name="status-col" label="是否启用" min-width="100" align="center">
         <template slot-scope="scope">
           <el-tag size="small" :type="scope.row.isEnabled | statusFilter">
             {{ scope.row.isEnabled ? '启用' : '禁用' }}
@@ -62,12 +62,12 @@
       <el-table-column label="创建时间" width="160" align="center">
         <template slot-scope="scope">
           <i class="el-icon-time" />
-          {{ scope.row.createTime }}
+          {{ scope.row.create_time }}
         </template>
       </el-table-column>
-      <el-table-column label="备注" min-width="150" align="center">
+      <el-table-column label="营业执照号" min-width="150" align="center" show-overflow-tooltip>
         <template slot-scope="scope">
-          {{ scope.row.memo }}
+          {{ scope.row.license_no }}
         </template>
       </el-table-column>
       <el-table-column label="操作" fixed="right" width="100">
@@ -114,11 +114,11 @@ export default {
       winHeight: window.innerHeight - 170,
       page: {
         total: 0,
-        pageSizes: [50, 100, 300, 500, 1000]
+        pageSizes: this.$page.pageSizes
       },
       listQuery: {
         page: 1,
-        limit: 50
+        limit: this.$page.limit
       },
       statusOptions: [
         { key: 'true', val: '启用' },

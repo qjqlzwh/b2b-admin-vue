@@ -94,6 +94,7 @@ import { popAddressList } from '@/api/user/customer'
 export default {
   // 声明接收的父属性
   props: {
+    isSingle: Boolean, // 是否单选
     customerAddrDialogVisible: Boolean,
     changeCustomerAddrDialogVisible: Function,
     customerAddrPopCallback: Function,
@@ -138,11 +139,13 @@ export default {
       this.$refs.tb.toggleRowSelection(val)
     },
     handleSelectionChange(val) {
-      if (val.length > 1) {
-        this.$refs.tb.clearSelection()
-        this.$refs.tb.toggleRowSelection(val.pop())
-      } else {
-        this.chek = val
+      if (this.isSingle) {
+        if (val.length > 1) {
+          this.$refs.tb.clearSelection()
+          this.$refs.tb.toggleRowSelection(val.pop())
+        } else {
+          this.chek = val
+        }
       }
     },
     onSelectAll() {

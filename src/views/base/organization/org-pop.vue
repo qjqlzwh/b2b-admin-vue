@@ -4,10 +4,14 @@
     <div class="filter-container">
       <el-button type="success" size="mini" icon="el-icon-thumb" @click="confirm">确认</el-button>
       <el-button type="primary" size="mini" icon="el-icon-search" @click="doPopSearch">搜索</el-button>
-      <el-input v-model="listQuery.dname" placeholder="机构名称" title="机构名称" size="mini" clearable style="width: 200px;" class="filter-item" @keyup.enter.native="doPopSearch" />
-      <el-select v-model="listQuery.isEnabled" placeholder="状态" title="状态" size="mini" clearable style="width: 90px" class="filter-item">
-        <el-option v-for="item in statusOptions" :key="item.key" :label="item.val" :value="item.key" />
-      </el-select>
+      <el-tooltip content="机构名称" placement="bottom" effect="light">
+        <el-input v-model="listQuery.dname" placeholder="机构名称" size="mini" clearable class="filter-item" @keyup.enter.native="doPopSearch" />
+      </el-tooltip>
+      <el-tooltip content="状态" placement="top" effect="light">
+        <el-select v-model="listQuery.isEnabled" placeholder="状态" size="mini" clearable style="width: 90px" class="filter-item">
+          <el-option v-for="item in statusOptions" :key="item.key" :label="item.val" :value="item.key" />
+        </el-select>
+      </el-tooltip>
     </div>
 
     <el-table
@@ -19,7 +23,6 @@
       @select-all="onSelectAll"
       @row-click="rowSelected"
       element-loading-text="Loading"
-      style="width: 100%;"
       size="mini"
       row-key="id"
       border
@@ -73,6 +76,7 @@ import { getList, getChild } from '@/api/base/organization'
 export default {
   // 声明接收的父属性
   props: {
+    isSingle: Boolean, // 是否单选
     orgDialogVisible: Boolean,
     changeOrgDialogVisible: Function,
     orgPopCallback: Function
@@ -85,11 +89,11 @@ export default {
       page: {
         pagerCount: 5,
         total: 0,
-        pageSizes: [50, 100, 300, 500, 1000]
+        pageSizes: this.$page.pageSizes
       },
       listQuery: {
         page: 1,
-        limit: 50
+        limit: this.$page.limit
       },
       statusOptions: [
         { key: 'true', val: '启用' },
@@ -116,20 +120,20 @@ export default {
       this.$refs.tb.toggleRowSelection(val)
     },
     handleSelectionChange(val) {
-      if (val.length > 1) {
-        this.$refs.tb.clearSelection()
-        this.$refs.tb.toggleRowSelection(val.pop())
-      } else {
-        this.chek = val
+      if (this.isSingle) {
+        if (val.length > 1) {
+          this.$refs.tb.clearSelection()
+          this.$refs.tb.toggleRowSelection(val.pop())
+        } else {
+          this.chek = val
+        }
       }
     },
     onSelectAll() {
       this.$refs.tb.clearSelection()
     },
     closePop() {
-      // this.orgDialogVisible = false
       this.changeOrgDialogVisible(false)
-      // this.$emit('orgDialogVisible', false)
     },
     doPopSearch() { // 搜索
       this.listQuery.page = 1

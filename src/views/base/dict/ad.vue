@@ -33,11 +33,11 @@
         <div class="me-inner-title">
           <p>
             <span>添加子项</span>
-            <el-button type="primary" round size="mini" icon="el-icon-plus" @click.native.prevent="addRow(pobj.childDict)">添加</el-button>
+            <el-button type="primary" round size="mini" icon="el-icon-plus" @click.native.prevent="addRow(pobj.childArea)">添加</el-button>
           </p>
         </div>
 
-        <el-table :data="pobj.childDict" border size="mini" style="width: 100%">
+        <el-table :data="pobj.childArea" border size="mini" style="width: 100%">
           <el-table-column fixed type="index" width="50" align="center"></el-table-column>
           <el-table-column prop="dname" label="词汇名称" width="200">
             <template slot-scope="scope">
@@ -64,7 +64,7 @@
           </el-table-column>
           <el-table-column label="操作" width="150" fixed="right">
             <template slot-scope="scope">
-              <el-button type="danger" plain icon="el-icon-delete" size="mini" round @click.native.prevent="deleteRow(scope.$index, pobj.childDict)">删除</el-button>
+              <el-button type="danger" plain icon="el-icon-delete" size="mini" round @click.native.prevent="deleteRow(scope.$index, pobj.childArea)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -84,7 +84,7 @@ export default {
         dname: '',
         dcode: '',
         isEnabled: true,
-        childDict: []
+        childArea: []
       },
       rules: {
         dname: [
@@ -168,7 +168,7 @@ export default {
         .then(response => {
           this.pobj = response.data
           // this.pobj.isEnabled = this.pobj.isEnabled.toString()
-          // this.pobj.childDict.filter(item => {
+          // this.pobj.childArea.filter(item => {
           //   item.isEnabled = item.isEnabled.toString()
           // })
         })

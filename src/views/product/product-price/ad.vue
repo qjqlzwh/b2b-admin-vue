@@ -66,10 +66,10 @@
               {{ scope.row.invalidTime }}
             </template>
           </el-table-column>
-          <el-table-column label="操作" width="150" >
+          <el-table-column label="操作" width="100" >
             <template slot-scope="scope">
               <el-button v-show="scope.row.state == 2" type="danger" plain size="mini" round @click.native.prevent="toInvalidCustomer(scope.row.id)">失效</el-button>
-              <el-button v-show="scope.row.state == 1" type="danger" size="mini" round @click.native.prevent="deleteRow(scope.$index, pobj.customerItem)">删除</el-button>
+              <el-button v-show="!scope.row.state || scope.row.state == 1" plain type="danger" size="mini" round @click.native.prevent="deleteRow(scope.$index, pobj.customerItem)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -112,21 +112,21 @@
               {{ scope.row.invalidTime }}
             </template>
           </el-table-column>
-          <el-table-column label="操作" width="80" fixed="right">
+          <el-table-column label="操作" width="100" fixed="right">
             <template slot-scope="scope">
-              <el-button :disabled="formGlobalDisableElse" v-show="scope.row.state == 2" type="danger" size="mini" round @click.native.prevent="toInvalidProduct(scope.row.id)">失效</el-button>
-              <el-button v-show="scope.row.state == 1" type="danger" size="mini" round @click.native.prevent="deleteRow(scope.$index, pobj.productItem)">删除</el-button>
+              <el-button :disabled="formGlobalDisableElse" v-show="scope.row.state == 2" plain type="danger" size="mini" round @click.native.prevent="toInvalidProduct(scope.row.id)">失效</el-button>
+              <el-button v-show="!scope.row.state || scope.row.state == 1" plain type="danger" size="mini" round @click.native.prevent="deleteRow(scope.$index, pobj.productItem)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
       </el-form>
     </el-card>
 
-    <OrgPop v-if="orgDialogVisible" :orgDialogVisible="orgDialogVisible" :changeOrgDialogVisible="changeOrgDialogVisible" :orgPopCallback="orgPopCallback"></OrgPop>
+    <OrgPop v-if="orgDialogVisible" :isSingle="true" :orgDialogVisible="orgDialogVisible" :changeOrgDialogVisible="changeOrgDialogVisible" :orgPopCallback="orgPopCallback"></OrgPop>
 
-    <CustomerPop v-if="customerDialogVisible" :customerDialogVisible="customerDialogVisible" :changeCustomerDialogVisible="changeCustomerDialogVisible" :customerPopCallback="customerPopCallback"></CustomerPop>
+    <CustomerPop v-if="customerDialogVisible" :isSingle="false" :customerDialogVisible="customerDialogVisible" :changeCustomerDialogVisible="changeCustomerDialogVisible" :customerPopCallback="customerPopCallback"></CustomerPop>
 
-    <ProductPop v-if="productDialogVisible" :productDialogVisible="productDialogVisible" :changeProductDialogVisible="changeProductDialogVisible" :productPopCallback="productPopCallback"></ProductPop>
+    <ProductPop v-if="productDialogVisible" :isSingle="false" :productDialogVisible="productDialogVisible" :changeProductDialogVisible="changeProductDialogVisible" :productPopCallback="productPopCallback"></ProductPop>
 
   </div>
 </template>
@@ -181,6 +181,12 @@ export default {
         ],
         validTime: [
           { required: true, message: '生效时间不能为空' }
+        ],
+        price: [
+          { required: true, message: '价格不能为空', trigger: 'blur' }
+        ],
+        quantity: [
+          { required: true, message: '数量不能为空', trigger: 'blur' }
         ]
       }
     }

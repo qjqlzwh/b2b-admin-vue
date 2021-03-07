@@ -95,9 +95,9 @@
       </el-form>
     </el-card>
 
-    <OrgPop v-if="orgDialogVisible" :orgDialogVisible="orgDialogVisible" :changeOrgDialogVisible="changeOrgDialogVisible" :orgPopCallback="orgPopCallback"></OrgPop>
+    <OrgPop v-if="orgDialogVisible" :isSingle="true" :orgDialogVisible="orgDialogVisible" :changeOrgDialogVisible="changeOrgDialogVisible" :orgPopCallback="orgPopCallback"></OrgPop>
 
-    <UserPop v-if="userDialogVisible" :userDialogVisible="userDialogVisible" :changeUserDialogVisible="changeUserDialogVisible" :userPopCallback="userPopCallback"></UserPop>
+    <UserPop v-if="userDialogVisible" :isSingle="true" :userDialogVisible="userDialogVisible" :changeUserDialogVisible="changeUserDialogVisible" :userPopCallback="userPopCallback"></UserPop>
   </div>
 </template>
 
@@ -107,7 +107,7 @@ import { save, update, detail } from '@/api/user/customer'
 import { allArea } from '@/api/base/area'
 
 import OrgPop from '@/views/base/organization/org-pop'
-import UserPop from '@/views/user/usercenter/userPop'
+import UserPop from '@/views/user/usercenter/user-pop'
 
 export default {
   components: {

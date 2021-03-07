@@ -32,10 +32,29 @@
         <el-form-item label="单位">
           <el-input v-model="pobj.unit" clearable></el-input>
         </el-form-item>
+
+        <div class="me-inner-title">
+          <p>
+            <span>图片</span>
+          </p>
+        </div>
+        <div>
+          <el-upload
+            action="https://jsonplaceholder.typicode.com/posts/"
+            list-type="picture-card"
+            multiple
+            :on-preview="handlePictureCardPreview"
+            :on-remove="handleRemove">
+            <i class="el-icon-plus"></i>
+          </el-upload>
+          <el-dialog :visible.sync="dialogUploadVisible">
+            <img width="100%" :src="dialogImageUrl" alt="">
+          </el-dialog>
+        </div>
       </el-form>
     </el-card>
 
-    <CategoryPop v-if="categoryDialogVisible" :categoryDialogVisible="categoryDialogVisible" :changeCategoryDialogVisible="changeCategoryDialogVisible" :categoryPopCallback="categoryPopCallback"></CategoryPop>
+    <CategoryPop v-if="categoryDialogVisible" :isSingle="true" :categoryDialogVisible="categoryDialogVisible" :changeCategoryDialogVisible="changeCategoryDialogVisible" :categoryPopCallback="categoryPopCallback"></CategoryPop>
 
   </div>
 </template>
@@ -52,6 +71,8 @@ export default {
   },
   data() {
     return {
+      dialogImageUrl: '',
+      dialogUploadVisible: false,
       categoryDialogVisible: false,
       pobj: {
         dname: '',
@@ -82,6 +103,14 @@ export default {
     }
   },
   methods: {
+    // 删除上传文件
+    handleRemove(file, fileList) {
+      console.log(file, fileList)
+    },
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url
+      this.dialogUploadVisible = true
+    },
     // 改变分类弹框可见
     changeCategoryDialogVisible(boo) {
       this.categoryDialogVisible = boo

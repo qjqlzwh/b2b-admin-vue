@@ -1,16 +1,16 @@
 import request from '@/utils/request'
-import qs from 'qs'
 
-export function getList(param) {
+export function getList(params) {
   return request({
-    url: `/cow-order/order/list?${qs.stringify(param)}`,
-    method: 'get'
+    url: '/cow-user/role/list',
+    method: 'get',
+    params
   })
 }
 
 export function save(params) {
   return request({
-    url: '/cow-order/order/add',
+    url: '/cow-user/role/add',
     method: 'post',
     data: params
   })
@@ -18,7 +18,7 @@ export function save(params) {
 
 export function update(params) {
   return request({
-    url: '/cow-order/order/update',
+    url: '/cow-user/role/update',
     method: 'post',
     data: params
   })
@@ -26,7 +26,16 @@ export function update(params) {
 
 export function detail(id) {
   return request({
-    url: `/cow-order/order/detail/${id}`,
+    url: `/cow-user/role/detail/${id}`,
     method: 'get'
   })
 }
+
+export function allRole(params) {
+  return request({
+    url: '/cow-user/role/allRole',
+    method: 'get',
+    params
+  })
+}
+

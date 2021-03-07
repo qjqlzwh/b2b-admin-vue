@@ -9,11 +9,14 @@
         </div>
       </div>
       <el-form :model="pobj" :rules="rules" :inline="true" ref="pobj" label-width="100px" size="small">
-        <el-form-item label="用户名" prop="username">
-          <el-input v-model="pobj.username" clearable></el-input>
+        <el-form-item label="参数名称" prop="dname">
+          <el-input v-model="pobj.dname" clearable></el-input>
         </el-form-item>
-        <el-form-item label="密码" prop="password">
-          <el-input v-model="pobj.password" clearable show-password></el-input>
+        <el-form-item label="参数编码" prop="dcode">
+          <el-input v-model="pobj.dcode" clearable></el-input>
+        </el-form-item>
+        <el-form-item label="参数值" prop="dvalue">
+          <el-input v-model="pobj.dvalue" clearable></el-input>
         </el-form-item>
         <el-form-item label="是否启用" prop="isEnabled">
           <el-radio-group v-model="pobj.isEnabled">
@@ -21,24 +24,9 @@
             <el-radio border :label="false">否</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="电话" prop="phone">
-          <el-input v-model="pobj.phone" clearable></el-input>
-        </el-form-item>
-        <el-form-item label="用户类型" prop="userType">
-          <el-select v-model="pobj.userType" clearable >
-            <el-option label="内部用户" :value="0"></el-option>
-            <el-option label="企业用户" :value="1"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="角色" class="me-form-memo">
-          <el-select v-model="pobj.roleList" multiple placeholder="请选择" style="min-width: 727px;">
-            <el-option
-              v-for="item in roles"
-              :key="item.id"
-              :label="item.dname"
-              :value="item.id">
-            </el-option>
-          </el-select>
+        <br/>
+        <el-form-item class="me-form-memo" label="备注" prop="memo">
+          <el-input type="textarea" v-model="pobj.memo" :autosize="{ minRows: 3, maxRows: 4}" maxlength="100" show-word-limit></el-input>
         </el-form-item>
       </el-form>
     </el-card>
@@ -47,38 +35,31 @@
 
 <script>
 
-import { save, update, detail } from '@/api/user/usercenter'
-import { allRole } from '@/api/user/role'
+import { save, update, detail } from '@/api/base/parameter'
 
 export default {
   data() {
     return {
       pobj: {
-        username: '',
-        password: '',
-        isEnabled: 'true',
-        phone: '',
-        userType: '0',
-        roleList: []
+        dname: '',
+        dcode: '',
+        dvalue: '',
+        isEnabled: true
       },
-      roles: {},
       rules: {
-        username: [
-          { required: true, message: '请输入用户名', trigger: 'blur' },
-          { min: 2, max: 50, message: '长度不能少于 2 个字符', trigger: 'blur' }
+        dname: [
+          { required: true, message: '请输入参数名称', trigger: 'blur' }
         ],
-        password: [
-          { required: true, message: '请输入密码', trigger: 'blur' },
-          { min: 6, max: 50, message: '长度不能少于 6 个字符', trigger: 'blur' }
+        dcode: [
+          { required: true, message: '请输入参数编码', trigger: 'blur' }
         ],
-        userType: [
-          { required: true, message: '必须先一个', trigger: 'change' }
+        dvalue: [
+          { required: true, message: '请输入参数值', trigger: 'blur' }
         ]
       }
     }
   },
   created() {
-    this.getAllRole()
     if (this.$route.params && this.$route.params.id) {
       this.getDetail(this.$route.params.id)
     }
@@ -110,14 +91,14 @@ export default {
       save(this.pobj)
         .then(response => {
           this.$message.success('添加成功')
-          this.$router.push({ path: '/usercenter/list' })
+          this.$router.push({ path: '/parameter/list' })
         })
     },
     toUpdate() {
       update(this.pobj)
         .then(response => {
           this.$message.success('更新成功')
-          this.$router.push({ path: '/usercenter/list' })
+          this.$router.push({ path: '/parameter/list' })
         })
     },
     getDetail(id) {
@@ -126,14 +107,10 @@ export default {
           this.pobj = response.data
         })
     },
-    getAllRole() {
-      allRole().then(response => {
-        this.roles = response.data
-      })
-    },
     // 重置
     resetForm(formObj) {
-      this.$refs[formObj].resetFields()
+      location.reload()
+      // this.$refs[formObj].resetFields()
     }
   }
 }

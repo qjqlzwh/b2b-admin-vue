@@ -12,7 +12,7 @@
         <el-input v-model="listQuery.customerName" placeholder="客户名称" size="medium" clearable class="filter-item" @keyup.enter.native="doSearch" />
       </el-tooltip>
       <el-tooltip content="状态" placement="top" effect="light">
-        <el-select v-model="listQuery.state" placeholder="状态" size="medium" clearable style="width: 100px" class="filter-item">
+        <el-select v-model="listQuery.state" multiple collapse-tags placeholder="状态" size="medium" clearable style="width: 150px" class="filter-item">
           <el-option v-for="(value, key) in statusOptions" :key="key" :label="value" :value="key" />
         </el-select>
       </el-tooltip>
@@ -42,19 +42,19 @@
       </el-table-column>
       <el-table-column label="客户名称" width="150" align="center">
         <template slot-scope="scope">
-          {{ scope.row.customerName }}
+          {{ scope.row.customer_name }}
         </template>
       </el-table-column>
       <el-table-column label="客户编码" width="150" align="center">
         <template slot-scope="scope">
-          {{ scope.row.customerCode }}
+          {{ scope.row.customer_code }}
         </template>
       </el-table-column>
       <el-table-column label="订单金额" min-width="150" align="center">
         <template slot-scope="scope">
           <span style="color: red">
             <i class="el-icon-money"></i>
-            {{ scope.row.totalPrice }}
+            {{ scope.row.total_price }}
           </span>
         </template>
       </el-table-column>
@@ -67,43 +67,43 @@
       </el-table-column>
       <el-table-column class-name="status-col" label="订单类型" width="110" align="center">
         <template slot-scope="scope">
-          {{ orderTypeOptions[scope.row.orderType] }}
+          {{ orderTypeOptions[scope.row.order_type] }}
         </template>
       </el-table-column>
       <el-table-column label="业务员" min-width="130" align="center">
         <template slot-scope="scope">
-          {{ scope.row.salesmanName }}
+          {{ scope.row.salesman_name }}
         </template>
       </el-table-column>
       <el-table-column label="机构" min-width="130" align="center">
         <template slot-scope="scope">
-          {{ scope.row.orgName }}
+          {{ scope.row.org_name }}
         </template>
       </el-table-column>
       <el-table-column label="收货人" min-width="130" align="center">
         <template slot-scope="scope">
-          {{ scope.row.shConsignee }}
+          {{ scope.row.sh_consignee }}
         </template>
       </el-table-column>
       <el-table-column label="收货人电话" min-width="130" align="center">
         <template slot-scope="scope">
-          {{ scope.row.shPhone }}
+          {{ scope.row.sh_phone }}
         </template>
       </el-table-column>
       <el-table-column label="收货省市区" min-width="150" align="center" show-overflow-tooltip>
         <template slot-scope="scope">
-          {{ scope.row.shProvince + scope.row.shCity + scope.row.shDistrict }}
+          {{ scope.row.sh_province + scope.row.sh_city + scope.row.sh_district }}
         </template>
       </el-table-column>
       <el-table-column label="收货地址" min-width="150" align="center" show-overflow-tooltip>
         <template slot-scope="scope">
-          {{ scope.row.shDetailedAddress }}
+          {{ scope.row.sh_detailed_address }}
         </template>
       </el-table-column>
       <el-table-column label="创建时间" width="160" align="center">
         <template slot-scope="scope">
           <i class="el-icon-time" />
-          {{ scope.row.createTime }}
+          {{ scope.row.create_time }}
         </template>
       </el-table-column>
       <el-table-column label="备注" min-width="150" align="center" show-overflow-tooltip>
@@ -156,11 +156,11 @@ export default {
       winHeight: window.innerHeight - 170,
       page: {
         total: 0,
-        pageSizes: [50, 100, 300, 500, 1000]
+        pageSizes: this.$page.pageSizes
       },
       listQuery: {
         page: 1,
-        limit: 50
+        limit: this.$page.limit
       },
       statusOptions: {
         '0': '已保存',

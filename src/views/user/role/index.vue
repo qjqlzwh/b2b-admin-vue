@@ -1,18 +1,18 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <router-link :to="'/parameter/add'">
+      <router-link :to="'/role/add'">
         <el-button type="primary" size="medium" icon="el-icon-circle-plus-outline">添加</el-button>
       </router-link>&nbsp;
       <el-button type="primary" size="medium" icon="el-icon-search" @click="doSearch">搜索</el-button>
-      <el-tooltip content="参数名称" placement="bottom" effect="light">
-        <el-input v-model="listQuery.dname" placeholder="参数名称" size="medium" clearable class="filter-item" @keyup.enter.native="doSearch" />
+      <el-tooltip content="角色名称" placement="bottom" effect="light">
+        <el-input v-model="listQuery.dname" placeholder="角色名称" size="medium" clearable class="filter-item" @keyup.enter.native="doSearch" />
       </el-tooltip>
-      <el-tooltip content="参数编码" placement="bottom" effect="light">
-        <el-input v-model="listQuery.dcode" placeholder="参数编码" size="medium" clearable class="filter-item" @keyup.enter.native="doSearch" />
+      <el-tooltip content="角色编码" placement="bottom" effect="light">
+        <el-input v-model="listQuery.dcode" placeholder="角色编码" size="medium" clearable class="filter-item" @keyup.enter.native="doSearch" />
       </el-tooltip>
-      <el-tooltip content="状态" placement="right" effect="light">
-        <el-select v-model="listQuery.isEnabled" placeholder="状态" size="medium" clearable style="width: 90px" class="filter-item">
+      <el-tooltip content="是否启用" placement="right" effect="light">
+        <el-select v-model="listQuery.isEnabled" placeholder="是否启用" size="medium" clearable style="width: 105px" class="filter-item">
           <el-option v-for="item in statusOptions" :key="item.key" :label="item.val" :value="item.key" />
         </el-select>
       </el-tooltip>
@@ -32,22 +32,17 @@
       highlight-current-row
     >
       <el-table-column type="selection" width="45" align="center"></el-table-column>
-      <el-table-column fixed label="参数名称" width="150" align="center">
+      <el-table-column fixed label="角色名称" width="150" align="center">
         <template slot-scope="scope">
           {{ scope.row.dname }}
         </template>
       </el-table-column>
-      <el-table-column fixed label="参数编码" width="150" align="center">
+      <el-table-column label="角色编码" width="250" align="center" show-overflow-tooltip>
         <template slot-scope="scope">
           {{ scope.row.dcode }}
         </template>
       </el-table-column>
-      <el-table-column fixed label="参数值" min-width="150" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.dvalue }}
-        </template>
-      </el-table-column>
-      <el-table-column class-name="status-col" label="状态" width="110" align="center">
+      <el-table-column class-name="status-col" label="是否启用" width="110" align="center">
         <template slot-scope="scope">
           <el-tag size="small" :type="scope.row.isEnabled | statusFilter">
             {{ scope.row.isEnabled ? '启用' : '禁用' }}
@@ -67,7 +62,7 @@
       </el-table-column>
       <el-table-column label="操作" width="100">
         <template slot-scope="scope">
-          <router-link :to="'/parameter/detail/'+scope.row.id" class="link-type">
+          <router-link :to="'/role/detail/'+scope.row.id" class="link-type">
             <el-button class="filter-item" style="padding: 5px 9px;" type="primary" plain size="mini" round icon="el-icon-edit-outline">编辑</el-button>
           </router-link>
         </template>
@@ -90,7 +85,7 @@
 </template>
 
 <script>
-import { getList } from '@/api/base/parameter'
+import { getList } from '@/api/user/role'
 
 export default {
   filters: {

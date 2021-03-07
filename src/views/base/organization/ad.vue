@@ -33,7 +33,7 @@
       </el-form>
     </el-card>
 
-    <OrgPop v-if="orgDialogVisible" :orgDialogVisible="orgDialogVisible" :changeOrgDialogVisible="changeOrgDialogVisible" :orgPopCallback="orgPopCallback"></OrgPop>
+    <OrgPop v-if="orgDialogVisible" :isSingle="true" :orgDialogVisible="orgDialogVisible" :changeOrgDialogVisible="changeOrgDialogVisible" :orgPopCallback="orgPopCallback"></OrgPop>
   </div>
 </template>
 

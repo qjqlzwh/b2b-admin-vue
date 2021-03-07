@@ -113,11 +113,11 @@ export default {
       winHeight: window.innerHeight - 170,
       page: {
         total: 0,
-        pageSizes: [50, 100, 300, 500, 1000]
+        pageSizes: this.$page.pageSizes
       },
       listQuery: {
         page: 1,
-        limit: 50
+        limit: this.$page.limit
       },
       statusOptions: [
         { key: 'true', val: '启用' },

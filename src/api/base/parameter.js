@@ -7,3 +7,26 @@ export function getList(params) {
     params
   })
 }
+
+export function save(params) {
+  return request({
+    url: '/cow-base/parameter/add',
+    method: 'post',
+    data: params
+  })
+}
+
+export function update(params) {
+  return request({
+    url: '/cow-base/parameter/update',
+    method: 'post',
+    data: params
+  })
+}
+
+export function detail(id) {
+  return request({
+    url: `/cow-base/parameter/detail/${id}`,
+    method: 'get'
+  })
+}

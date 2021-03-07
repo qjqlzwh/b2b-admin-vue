@@ -1,6 +1,6 @@
 <template>
   <!--  弹框  -->
-  <el-dialog title="选择产品" class="me-pop-table" top="6vh" width="60%" center @close="closePop" :visible.sync="priceProductDialogVisible">
+  <el-dialog title="选择产品" class="me-pop-table" top="6vh" width="65%" center @close="closePop" :visible.sync="priceProductDialogVisible">
     <div class="filter-container">
       <el-button type="success" size="mini" icon="el-icon-thumb" @click="confirm">确认</el-button>
       <el-button type="primary" size="mini" icon="el-icon-search" @click="doPopSearch">搜索</el-button>
@@ -82,6 +82,7 @@ import { getPopPriceList } from '@/api/product/product'
 export default {
   // 声明接收的父属性
   props: {
+    isSingle: Boolean, // 是否单选
     priceProductDialogVisible: Boolean,
     changePriceProductDialogVisible: Function,
     priceProductPopCallback: Function,
@@ -95,11 +96,11 @@ export default {
       page: {
         pagerCount: 5,
         total: 0,
-        pageSizes: [50, 100, 300, 500, 1000]
+        pageSizes: this.$page.pageSizes
       },
       listQuery: {
         page: 1,
-        limit: 50
+        limit: this.$page.limit
       }
     }
   },
@@ -122,11 +123,13 @@ export default {
       this.$refs.tb.toggleRowSelection(val)
     },
     handleSelectionChange(val) {
-      if (val.length > 1) {
-        // this.$refs.tb.clearSelection()
-        // this.$refs.tb.toggleRowSelection(val.pop())
-      } else {
-        // this.chek = val
+      if (this.isSingle) {
+        if (val.length > 1) {
+          this.$refs.tb.clearSelection()
+          this.$refs.tb.toggleRowSelection(val.pop())
+        } else {
+          this.chek = val
+        }
       }
     },
     onSelectAll() {

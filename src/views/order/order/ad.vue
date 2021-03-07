@@ -129,11 +129,11 @@
       </el-form>
     </el-card>
 
-    <CustomerPop v-if="customerDialogVisible" :customerDialogVisible="customerDialogVisible" :changeCustomerDialogVisible="changeCustomerDialogVisible" :customerPopCallback="customerPopCallback"></CustomerPop>
+    <CustomerPop v-if="customerDialogVisible" :isSingle="true" :customerDialogVisible="customerDialogVisible" :changeCustomerDialogVisible="changeCustomerDialogVisible" :customerPopCallback="customerPopCallback"></CustomerPop>
 
-    <CustomerAddressPop v-if="customerAddrDialogVisible" :customerAddrDialogVisible="customerAddrDialogVisible" :changeCustomerAddrDialogVisible="changeCustomerAddrDialogVisible" :customerAddrPopCallback="customerAddrPopCallback" :customerId="pobj.customer"></CustomerAddressPop>
+    <CustomerAddressPop v-if="customerAddrDialogVisible" :isSingle="true" :customerAddrDialogVisible="customerAddrDialogVisible" :changeCustomerAddrDialogVisible="changeCustomerAddrDialogVisible" :customerAddrPopCallback="customerAddrPopCallback" :customerId="pobj.customer"></CustomerAddressPop>
 
-    <PriceProductPop v-if="priceProductDialogVisible" :priceProductDialogVisible="priceProductDialogVisible" :changePriceProductDialogVisible="changePriceProductDialogVisible" :priceProductPopCallback="priceProductPopCallback" :customerId="pobj.customer"></PriceProductPop>
+    <PriceProductPop v-if="priceProductDialogVisible" :isSingle="false" :priceProductDialogVisible="priceProductDialogVisible" :changePriceProductDialogVisible="changePriceProductDialogVisible" :priceProductPopCallback="priceProductPopCallback" :customerId="pobj.customer"></PriceProductPop>
   </div>
 </template>
 

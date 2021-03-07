@@ -20,7 +20,7 @@
       </el-form>
     </el-card>
 
-    <CategoryPop v-if="categoryDialogVisible" :categoryDialogVisible="categoryDialogVisible" :changeCategoryDialogVisible="changeCategoryDialogVisible" :categoryPopCallback="categoryPopCallback"></CategoryPop>
+    <CategoryPop v-if="categoryDialogVisible" :isSingle="true" :categoryDialogVisible="categoryDialogVisible" :changeCategoryDialogVisible="changeCategoryDialogVisible" :categoryPopCallback="categoryPopCallback"></CategoryPop>
 
   </div>
 </template>

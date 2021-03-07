@@ -66,6 +66,7 @@ import { getList } from '@/api/user/usercenter'
 export default {
   // 声明接收的父属性
   props: {
+    isSingle: Boolean, // 是否单选
     userDialogVisible: Boolean,
     changeUserDialogVisible: Function,
     userPopCallback: Function
@@ -78,11 +79,11 @@ export default {
       page: {
         pagerCount: 5,
         total: 0,
-        pageSizes: [50, 100, 300, 500, 1000]
+        pageSizes: this.$page.pageSizes
       },
       listQuery: {
         page: 1,
-        limit: 50,
+        limit: this.$page.limit,
         userType: 0
       },
       statusOptions: [
@@ -115,11 +116,13 @@ export default {
       this.$refs.tb.toggleRowSelection(val)
     },
     handleSelectionChange(val) {
-      if (val.length > 1) {
-        this.$refs.tb.clearSelection()
-        this.$refs.tb.toggleRowSelection(val.pop())
-      } else {
-        this.chek = val
+      if (this.isSingle) {
+        if (val.length > 1) {
+          this.$refs.tb.clearSelection()
+          this.$refs.tb.toggleRowSelection(val.pop())
+        } else {
+          this.chek = val
+        }
       }
     },
     onSelectAll() {
