@@ -317,6 +317,12 @@ export const constantRoutes = [
         component: () => import('@/views/base/organization/ad'),
         meta: { title: '编辑机构' },
         hidden: true
+      },
+      {
+        path: '/notice/list',
+        name: '通知',
+        component: () => import('@/views/base/notice/index'),
+        meta: { title: '通知' }
       }
     ]
   },
@@ -329,15 +335,15 @@ export const constantRoutes = [
     meta: { title: '报表管理', icon: 'el-icon-document' },
     children: [
       {
-        path: '/productPriceReport/list',
+        path: '/product-price-report/list',
         name: '产品价格报表',
-        component: () => import('@/views/report/productPriceReport/index'),
+        component: () => import('@/views/report/product-price-report/index'),
         meta: { title: '产品价格报表' }
       },
       {
-        path: '/productPriceReport/list',
+        path: '/product-price-report/list',
         name: '订单报表',
-        component: () => import('@/views/report/productPriceReport/index'),
+        component: () => import('@/views/report/product-price-report/index'),
         meta: { title: '订单报表' }
       }
     ]

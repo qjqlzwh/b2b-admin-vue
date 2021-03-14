@@ -1,6 +1,7 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
+      <el-button type="success" size="medium" icon="el-icon-download" @click="download">导出</el-button>&nbsp;
       <router-link :to="'/product/add'">
         <el-button type="primary" size="medium" icon="el-icon-circle-plus-outline">添加</el-button>
       </router-link>&nbsp;
@@ -123,6 +124,9 @@ export default {
     this.fetchData()
   },
   methods: {
+    download() {
+      location.href = this.COW_PATH + '/cow-product/product/download'
+    },
     doSearch() { // 搜索
       this.listQuery.page = 1
       this.fetchData()

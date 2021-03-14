@@ -4,12 +4,12 @@
       <div slot="header" class="clearfix">
         <span>{{ $route.name }}</span>
         <div class="me-right">
-          <el-button v-if="pobj.state != '' && pobj.state == 0" type="success" icon="el-icon-s-check" size="mini" @click="toAudit('pobj')">审核</el-button>
+          <el-button v-if="pobj.state == 0" type="success" icon="el-icon-s-check" size="mini" @click="toAudit('pobj')">审核</el-button>
           <el-button v-if="pobj.state == '' || pobj.state == 0" type="primary" icon="el-icon-check" size="mini" @click="saveOrUpdate('pobj')">保存</el-button>
           <el-button type="info" icon="el-icon-refresh" size="mini" @click="resetForm()">重置</el-button>
         </div>
       </div>
-      <el-form :model="pobj" :rules="rules" :inline="true" :disabled="formGlobalDisable" ref="pobj" label-width="100px" size="small">
+      <el-form :model="pobj" :rules="rules" :inline="true" ref="pobj" label-width="100px" size="small">
         <el-form-item label="单号">
           <el-input v-model="pobj.sn" disabled></el-input>
         </el-form-item>
@@ -25,23 +25,23 @@
           </el-select>
         </el-form-item>
         <el-form-item label="名称" prop="dname">
-          <el-input v-model="pobj.dname" clearable></el-input>
+          <el-input v-model="pobj.dname" clearable :disabled="formGlobalDisable"></el-input>
         </el-form-item>
         <el-form-item label="机构" prop="organization">
-          <el-input v-model="pobj.orgName" @click.native="changeOrgDialogVisible(true)" class="me-input-prefix" prefix-icon="el-icon-search" readonly></el-input>
+          <el-input v-model="pobj.orgName" :disabled="formGlobalDisable" @click.native="changeOrgDialogVisible(true)" class="me-input-prefix" prefix-icon="el-icon-search" readonly></el-input>
         </el-form-item>
-        <el-form-item label="生效时间" prop="validTime">
-          <el-date-picker v-model="pobj.validTime" type="datetimerange" @change="changeValidTime" value-format="yyyy-MM-dd HH:mm:ss" range-separator="-" start-placeholder="开始时间" end-placeholder="结束时间" align="right"></el-date-picker>
+        <el-form-item label="生效时间" prop="validTime" :disabled="formGlobalDisable">
+          <el-date-picker v-model="pobj.validTime" type="datetimerange" :disabled="formGlobalDisable" @change="changeValidTime" value-format="yyyy-MM-dd HH:mm:ss" range-separator="-" start-placeholder="开始时间" end-placeholder="结束时间" align="right"></el-date-picker>
         </el-form-item>
         <br/>
-        <el-form-item class="me-form-memo" label="备注" prop="memo">
-          <el-input type="textarea" v-model="pobj.memo" :autosize="{ minRows: 3, maxRows: 4}" maxlength="100" show-word-limit></el-input>
+        <el-form-item class="me-form-memo" label="备注" prop="memo" :disabled="formGlobalDisable">
+          <el-input type="textarea" v-model="pobj.memo" :disabled="formGlobalDisable" :autosize="{ minRows: 3, maxRows: 4}" maxlength="100" show-word-limit></el-input>
         </el-form-item>
 
         <div class="me-inner-title">
           <p>
             <span>添加客户</span>
-            <el-button type="primary" round size="mini" icon="el-icon-plus" @click.native="changeCustomerDialogVisible(true)">添加</el-button>
+            <el-button type="primary" round size="mini" :disabled="formGlobalDisable" icon="el-icon-plus" @click.native="changeCustomerDialogVisible(true)">添加</el-button>
           </p>
         </div>
         <el-table :data="pobj.customerItem" border size="mini" style="width: 100%">
@@ -56,17 +56,17 @@
               {{ scope.row.customerCode }}
             </template>
           </el-table-column>
-          <el-table-column prop="isEnabled" label="行状态" width="120">
+          <el-table-column prop="isEnabled" label="行状态" width="120" v-if="isDetailPage">
             <template slot-scope="scope">
               {{ scope.row.state != null ? statusOptions[scope.row.state] : '' }}
             </template>
           </el-table-column>
-          <el-table-column prop="memo" label="失效时间" width="160">
+          <el-table-column prop="memo" label="失效时间" width="160" v-if="isDetailPage">
             <template slot-scope="scope">
               {{ scope.row.invalidTime }}
             </template>
           </el-table-column>
-          <el-table-column label="操作" width="100" >
+          <el-table-column label="操作" width="100">
             <template slot-scope="scope">
               <el-button v-show="scope.row.state == 2" type="danger" plain size="mini" round @click.native.prevent="toInvalidCustomer(scope.row.id)">失效</el-button>
               <el-button v-show="!scope.row.state || scope.row.state == 1" plain type="danger" size="mini" round @click.native.prevent="deleteRow(scope.$index, pobj.customerItem)">删除</el-button>
@@ -77,7 +77,7 @@
         <div class="me-inner-title">
           <p>
             <span>添加产品</span>
-            <el-button type="primary" round size="mini" icon="el-icon-plus" @click.native.prevent="changeProductDialogVisible(true)">添加</el-button>
+            <el-button type="primary" round size="mini" :disabled="formGlobalDisable" icon="el-icon-plus" @click.native.prevent="changeProductDialogVisible(true)">添加</el-button>
           </p>
         </div>
         <el-table :data="pobj.productItem" border size="mini" style="width: 100%">
@@ -94,27 +94,27 @@
           </el-table-column>
           <el-table-column label="价格" width="155">
             <template slot-scope="scope">
-              <el-input-number size="small" v-model="scope.row.price" :min="0.01" label="价格"></el-input-number>
+              <el-input-number size="small" v-model="scope.row.price" :disabled="formGlobalDisable" :min="0.01" label="价格"></el-input-number>
             </template>
           </el-table-column>
           <el-table-column label="数量" width="155">
             <template slot-scope="scope">
-              <el-input-number size="small" v-model="scope.row.quantity" :min="1" label="数量"></el-input-number>
+              <el-input-number size="small" v-model="scope.row.quantity" :disabled="formGlobalDisable" :min="1" label="数量" required></el-input-number>
             </template>
           </el-table-column>
-          <el-table-column prop="state" label="行状态" width="100">
+          <el-table-column prop="state" label="行状态" width="100" v-if="isDetailPage">
             <template slot-scope="scope">
               {{ scope.row.state != null ? statusOptions[scope.row.state] : '' }}
             </template>
           </el-table-column>
-          <el-table-column prop="memo" label="失效时间" width="150">
+          <el-table-column prop="memo" label="失效时间" width="150" v-if="isDetailPage">
             <template slot-scope="scope">
               {{ scope.row.invalidTime }}
             </template>
           </el-table-column>
           <el-table-column label="操作" width="100" fixed="right">
             <template slot-scope="scope">
-              <el-button :disabled="formGlobalDisableElse" v-show="scope.row.state == 2" plain type="danger" size="mini" round @click.native.prevent="toInvalidProduct(scope.row.id)">失效</el-button>
+              <el-button v-show="scope.row.state == 2" plain type="danger" size="mini" round @click.native.prevent="toInvalidProduct(scope.row.id)">失效</el-button>
               <el-button v-show="!scope.row.state || scope.row.state == 1" plain type="danger" size="mini" round @click.native.prevent="deleteRow(scope.$index, pobj.productItem)">删除</el-button>
             </template>
           </el-table-column>
@@ -147,6 +147,7 @@ export default {
   },
   data() {
     return {
+      isDetailPage: false,
       formGlobalDisable: false, // 全局禁用表单
       formGlobalDisableElse: true, // 全局禁用表单
       orgDialogVisible: false,
@@ -193,6 +194,7 @@ export default {
   },
   created() {
     if (this.$route.params && this.$route.params.id) {
+      this.isDetailPage = true
       this.getDetail(this.$route.params.id)
     }
   },

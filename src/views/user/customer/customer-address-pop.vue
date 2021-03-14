@@ -45,12 +45,12 @@
           {{ scope.row.city }}
         </template>
       </el-table-column>
-      <el-table-column label="区" align="center">
+      <el-table-column label="区" align="center" show-overflow-tooltip>
         <template slot-scope="scope">
           {{ scope.row.district }}
         </template>
       </el-table-column>
-      <el-table-column label="详细地址" align="center">
+      <el-table-column label="详细地址" align="center" show-overflow-tooltip>
         <template slot-scope="scope">
           {{ scope.row.detailedAddress }}
         </template>
@@ -149,7 +149,9 @@ export default {
       }
     },
     onSelectAll() {
-      this.$refs.tb.clearSelection()
+      if (this.isSingle) {
+        this.$refs.tb.clearSelection()
+      }
     },
     closePop() {
       this.changeCustomerAddrDialogVisible(false)

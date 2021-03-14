@@ -30,3 +30,18 @@ export function detail(id) {
     method: 'get'
   })
 }
+
+export function submit(params) {
+  return request({
+    url: '/cow-order/order/submit',
+    method: 'post',
+    data: params
+  })
+}
+
+export function audit(id) {
+  return request({
+    url: `/cow-order/order/audit?id=${id}`,
+    method: 'post'
+  })
+}

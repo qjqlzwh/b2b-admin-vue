@@ -4,11 +4,13 @@
       <div slot="header" class="clearfix">
         <span>{{ $route.name }}</span>
         <div class="me-right">
-          <el-button type="primary" icon="el-icon-check" size="mini" @click="saveOrUpdate('pobj')">保存</el-button>
+          <el-button v-if="this.pobj.state === 1" type="success" icon="el-icon-s-check" size="mini" @click="toAudit('pobj')">审核</el-button>
+          <el-button v-if="this.pobj.state === 0" type="success" icon="el-icon-circle-check" size="mini" @click="toSubmit('pobj')">提交</el-button>
+          <el-button v-if="this.pobj.state == '' || this.pobj.state === 0" type="primary" icon="el-icon-check" size="mini" @click="saveOrUpdate('pobj')">保存</el-button>
           <el-button type="info" icon="el-icon-refresh" size="mini" @click="resetForm()">重置</el-button>
         </div>
       </div>
-      <el-form :model="pobj" :rules="rules" :inline="true" ref="pobj" label-width="100px" size="small">
+      <el-form :model="pobj" :rules="rules" :inline="true" :disabled="formGlobalDisable" ref="pobj" label-width="100px" size="small">
         <el-form-item label="订单号">
           <el-input v-model="pobj.sn" disabled></el-input>
         </el-form-item>
@@ -41,7 +43,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="订单金额">
-          <el-input v-model="pobj.totalPrice" clearable disabled></el-input>
+          <el-input v-model="pobj.totalPrice" prefix-icon="el-icon-money" clearable disabled></el-input>
         </el-form-item>
         <br/>
         <el-form-item class="me-form-memo" label="备注" prop="memo">
@@ -139,7 +141,7 @@
 
 <script>
 
-import { save, update, detail } from '@/api/order/order'
+import { save, update, detail, submit, audit } from '@/api/order/order'
 import { getDefaultAddr } from '@/api/user/customer'
 
 import CustomerPop from '@/views/user/customer/customer-pop'
@@ -154,6 +156,7 @@ export default {
   },
   data() {
     return {
+      formGlobalDisable: false, // 全局禁用表单
       customerDialogVisible: false,
       customerAddrDialogVisible: false,
       priceProductDialogVisible: false,
@@ -192,6 +195,9 @@ export default {
   created() {
     if (this.$route.params && this.$route.params.id) {
       this.getDetail(this.$route.params.id)
+      if (this.pobj.state !== 0) {
+        this.formGlobalDisable = true
+      }
     }
   },
   methods: {
@@ -308,6 +314,40 @@ export default {
           // 回到列表
           this.$router.push({ path: '/order/list' })
         })
+    },
+    // 提交
+    toSubmit(formObj) {
+      this.$refs[formObj].validate((valid) => {
+        if (valid) {
+          this.$confirm('是否确定提交?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'success'
+          }).then(() => {
+            submit(this.pobj)
+              .then(response => {
+                this.$message.success('提交成功')
+                location.reload()
+              })
+          })
+        } else {
+          return false
+        }
+      })
+    },
+    // 审核
+    toAudit() {
+      this.$confirm('是否确定审核?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'success'
+      }).then(() => {
+        audit(this.pobj.id)
+          .then(response => {
+            this.$message.success('审核成功')
+            this.$router.push({ path: '/order/list' })
+          })
+      })
     },
     getDetail(id) {
       detail(id)

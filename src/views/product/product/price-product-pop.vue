@@ -133,7 +133,9 @@ export default {
       }
     },
     onSelectAll() {
-      this.$refs.tb.clearSelection()
+      if (this.isSingle) {
+        this.$refs.tb.clearSelection()
+      }
     },
     closePop() {
       this.changePriceProductDialogVisible(false)
