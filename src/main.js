@@ -43,6 +43,9 @@ Vue.prototype.$page = {
   limit: 50
 }
 
+// 全局地址
+Vue.prototype.COW_PATH = 'http://127.0.0.1:8888'
+
 new Vue({
   el: '#app',
   router,
