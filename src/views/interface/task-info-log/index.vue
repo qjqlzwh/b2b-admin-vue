@@ -111,7 +111,7 @@ export default {
     return {
       listData: [],
       listLoading: true,
-      winHeight: window.innerHeight - 170,
+      winHeight: this.$page.winHeight,
       page: {
         total: 0,
         pageSizes: this.$page.pageSizes

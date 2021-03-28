@@ -153,24 +153,10 @@ export const constantRoutes = [
         hidden: true
       },
       {
-        path: '/customer/list',
-        name: '客户',
-        component: () => import('@/views/user/customer/index'),
-        meta: { title: '客户' }
-      },
-      {
-        path: '/customer/add',
-        name: '添加客户',
-        component: () => import('@/views/user/customer/ad'),
-        meta: { title: '添加客户' },
-        hidden: true
-      },
-      {
-        path: '/customer/detail/:id',
-        name: '编辑客户',
-        component: () => import('@/views/user/customer/ad'),
-        meta: { title: '编辑客户' },
-        hidden: true
+        path: '/order/list',
+        name: '订单报表',
+        component: () => import('@/views/order/order/index'),
+        meta: { title: '订单报表' }
       }
     ]
   },

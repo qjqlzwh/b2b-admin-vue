@@ -38,7 +38,10 @@ Vue.config.productionTip = false
 
 Vue.prototype.$qs = qs
 
+Vue.prototype.$qs = qs
+
 Vue.prototype.$page = {
+  winHeight: window.innerHeight - 195,
   pageSizes: [50, 100, 300, 500, 1000],
   limit: 50
 }
