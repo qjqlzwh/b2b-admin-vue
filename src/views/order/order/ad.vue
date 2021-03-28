@@ -43,7 +43,9 @@
           </el-select>
         </el-form-item>
         <el-form-item label="订单金额">
-          <el-input v-model="pobj.totalPrice" prefix-icon="el-icon-money" clearable disabled></el-input>
+          <el-input v-model="pobj.totalPrice" prefix-icon="el-icon-money" clearable disabled>
+            <template slot="append">元</template>
+          </el-input>
         </el-form-item>
         <br/>
         <el-form-item class="me-form-memo" label="备注" prop="memo">
@@ -195,9 +197,6 @@ export default {
   created() {
     if (this.$route.params && this.$route.params.id) {
       this.getDetail(this.$route.params.id)
-      if (this.pobj.state !== 0) {
-        this.formGlobalDisable = true
-      }
     }
   },
   methods: {
@@ -345,7 +344,7 @@ export default {
         audit(this.pobj.id)
           .then(response => {
             this.$message.success('审核成功')
-            this.$router.push({ path: '/order/list' })
+            this.$router.push({ path: '../list' })
           })
       })
     },
@@ -353,6 +352,9 @@ export default {
       detail(id)
         .then(response => {
           this.pobj = response.data
+          if (this.pobj.state !== 0) {
+            this.formGlobalDisable = true
+          }
         })
     },
     // 重置

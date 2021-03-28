@@ -49,9 +49,9 @@ export const constantRoutes = [
     redirect: '/dashboard',
     children: [{
       path: 'dashboard',
-      name: 'Dashboard',
+      name: '首页',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard' }
+      meta: { title: '首页', icon: 'dashboard' }
     }]
   },
 
@@ -341,10 +341,32 @@ export const constantRoutes = [
         meta: { title: '产品价格报表' }
       },
       {
-        path: '/product-price-report/list',
+        path: '/order-report/list',
         name: '订单报表',
-        component: () => import('@/views/report/product-price-report/index'),
+        component: () => import('@/views/report/order-report/index'),
         meta: { title: '订单报表' }
+      }
+    ]
+  },
+
+  {
+    path: '/interface',
+    component: Layout,
+    redirect: '/interface',
+    name: '接口服务',
+    meta: { title: '接口服务', icon: 'el-icon-connection' },
+    children: [
+      {
+        path: '/task-config/list',
+        name: '任务配置',
+        component: () => import('@/views/interface/task-config/index'),
+        meta: { title: '任务配置' }
+      },
+      {
+        path: '/task-info-log/list',
+        name: '任务日志',
+        component: () => import('@/views/interface/task-info-log/index'),
+        meta: { title: '任务日志' }
       }
     ]
   },

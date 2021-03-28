@@ -42,7 +42,7 @@
       <el-table-column label="创建时间" width="160" align="center">
         <template slot-scope="scope">
           <i class="el-icon-time" />
-          {{ scope.row.createTime }}
+          {{ scope.row.create_time }}
         </template>
       </el-table-column>
       <el-table-column label="操作" width="100">
