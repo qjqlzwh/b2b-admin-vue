@@ -37,7 +37,7 @@ src/router/index.js
 ```
 
 ## 项目截图
-![img_1.png](doc/img/img_1.png)
-![img_2.png](doc/img/img_2.png)
-![img_3.png](doc/img/img_3.png)
-![img_4.png](doc/img/img_4.png)
+![image](https://user-images.githubusercontent.com/42276880/112842171-de7a7a80-90d3-11eb-9035-0b206a734a08.png)
+![image](https://user-images.githubusercontent.com/42276880/112842238-efc38700-90d3-11eb-8a81-fbd3703691c7.png)
+![image](https://user-images.githubusercontent.com/42276880/112842443-21d4e900-90d4-11eb-91d4-3ebf4732c5e0.png)
+![image](https://user-images.githubusercontent.com/42276880/112842483-2d281480-90d4-11eb-82b0-5392f40a3a40.png)
